@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinokoreanisches Zahlenquiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .question-container {
+            display: flex;
+            align-items: center; /* Vertikale Ausrichtung */
+        }
+        .question {
+            margin-right: 10px; /* Abstand zwischen Frage und Eingabefeld */
+            font-size: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #answer {
+            padding: 10px;
+            font-size: 16px;
+            width: 50%; /* Gleiche Größe wie im vorherigen Quiz */
+        }
+        .keyboard {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        .key {
+            padding: 10px;
+            background-color: #ddd;
+            border: 1px solid #aaa;
+            text-align: center;
+            cursor: pointer;
+            margin: 2px;
+        }
+        .key:hover {
+            background-color: #ccc;
+        }
+        .incorrect {
+            color: red; /* Färbt den Text rot */
+        }
+        .correct {
+            color: green; /* Färbt den Text grün */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Sinokoreanisches Zahlenquiz</h1>
+<label for="rangeSelect">Wähle den Zahlenbereich:</label>
+<select id="rangeSelect">
+    <option value="10">0 bis 10</option>
+    <option value="100">0 bis 100</option>
+    <option value="1000">0 bis 1.000</option>
+    <option value="10000">0 bis 10.000</option>
+    <option value="100000000">0 bis 100.000.000</option>
+    <option value="1000000000000">0 bis 1 Billion</option>
+</select>
+<div class="question-container">
+    <div class="question" id="question"></div>
+    <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." />
+</div>
+<button id="nextButton" onclick="checkAnswer()">Antwort überprüfen</button>
+<div class="result" id="result"></div>
+
+<div class="keyboard">
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('영')">영</div>
+        <div class="key" onclick="addKeyToInput('일')">일</div>
+        <div class="key" onclick="addKeyToInput('이')">이</div>
+        <div class="key" onclick="addKeyToInput('삼')">삼</div>
+        <div class="key" onclick="addKeyToInput('사')">사</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('오')">오</div>
+        <div class="key" onclick="addKeyToInput('육')">육</div>
+        <div class="key" onclick="addKeyToInput('칠')">칠</div>
+        <div class="key" onclick="addKeyToInput('팔')">팔</div>
+        <div class="key" onclick="addKeyToInput('구')">구</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('십')">십</div>
+        <div class="key" onclick="addKeyToInput('백')">백</div>
+        <div class="key" onclick="addKeyToInput('천')">천</div>
+        <div class="key" onclick="addKeyToInput('만')">만</div>
+        <div class="key" onclick="addKeyToInput('억')">억</div>
+        <div class="key" onclick="addKeyToInput('조')">조</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="removeLastCharacter()">Backspace</div>
+        <div class="key" onclick="addKeyToInput(' ');">Space</div>
+    </div>
+</div>
+
+<script>
+    let currentNumber; // Die aktuelle Zufallszahl
+
+   // Konvertiert eine Zahl in sino-koreanische Zahlen
+function generateSinokoreanNumber(number) {
+  if (typeof number !== 'number' || number % 1 !== 0) {
+    throw new Error('Die Eingabe muss eine ganze Zahl sein.');
+  }
+
+  const sinoKoreanDigits = ['영', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+  const sinoKoreanUnits = ['', '십', '백', '천'];
+  const sinoKoreanLargeUnits = ['', '만', '억', '조', '경'];
+
+  // Zahl in Ziffern aufteilen und umdrehen
+  const digits = String(number).split('').reverse();
+  let result = '';
+  let groupResult = ''; // Zwischenwert für die aktuellen 4 Ziffern
+  let largeUnitIndex = 0; // Index für große Einheiten (만, 억, ...)
+
+  for (let i = 0; i < digits.length; i++) {
+    const digit = parseInt(digits[i]);
+    const unitPosition = i % 4; // Position innerhalb des 4er-Blocks
+
+    if (digit !== 0) {
+      // Sonderfall: Die Zehnerstelle hat eine "1"
+      if (digit === 1 && unitPosition === 1) {
+        groupResult = sinoKoreanUnits[unitPosition] + groupResult; // Nur "십", ohne "일"
+      } else {
+        groupResult = sinoKoreanDigits[digit] + sinoKoreanUnits[unitPosition] + groupResult;
+      }
+    }
+
+    // Wenn das Ende eines 4er-Blocks erreicht ist oder die letzte Ziffer erreicht ist
+    if (unitPosition === 3 || i === digits.length - 1) {
+      if (groupResult) {
+        // Große Einheit hinzufügen, falls der Block nicht leer ist
+        result = groupResult + sinoKoreanLargeUnits[largeUnitIndex] + result;
+      }
+      groupResult = ''; // Zurücksetzen des Block-Resultats
+      largeUnitIndex++; // Zur nächsten großen Einheit wechseln
+    }
+  }
+
+  return result || sinoKoreanDigits[0]; // Rückgabe "영" für 0
+}
+
+    function formatNumberWithThousandSeparator(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Tausenderpunkt hinzufügen
+    }
+
+function formatKoreanNumberWithSpaces(number) {
+    return number.replace(/(십|백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
+}
+
+    function generateQuiz() {
+        const rangeSelect = document.getElementById("rangeSelect");
+        const maxRange = parseInt(rangeSelect.value); // Maximalen Bereich aus der Auswahl abrufen
+        currentNumber = Math.floor(Math.random() * (maxRange + 1)); // Zufallszahl zwischen 0 und maxRange
+        document.getElementById("question").innerText = `Was ist die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(currentNumber)}?`;
+        document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
+        document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
+    }
+
+    function checkAnswer() {
+        const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
+        const correctAnswer = generateSinokoreanNumber(currentNumber); // Korrekte Antwort generieren
+        const resultDiv = document.getElementById("result");
+previousNumber = currentNumber
+
+// Wenn keine Benutzereingabe gemacht wurde
+    if (userAnswer === "") {
+// Generiere sofort eine neue Frage
+        generateQuiz();
+        resultDiv.innerHTML = `Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
+        return; // Beende die Funktion hier
+    }
+        // Alternative Antworten für 100, 1000, 10000 und andere Einheiten
+        const alternativeAnswers = {
+            "백": ["일백", "백"],
+            "천": ["일천", "천"],
+            "만": ["일만", "만"],
+            "억": ["일억", "억"],
+            "조": ["일조", "조"]
+        };
+
+        // Generiere sofort eine neue Frage
+        generateQuiz();
+
+        // Vergleiche die Benutzereingabe mit der richtigen Antwort
+        if (userAnswer !== correctAnswer && !(correctAnswer in alternativeAnswers && alternativeAnswers[correctAnswer].includes(userAnswer))) {
+            let incorrectPart = '';
+            let correctPart = '';
+
+            const minLength = Math.min(userAnswer.length, correctAnswer.length);
+            let mismatchIndex = -1;
+
+            // Vergleiche Zeichen für Zeichen
+            for (let i = 0; i < minLength; i++) {
+                if (userAnswer[i] !== correctAnswer[i]) {
+                    mismatchIndex = i;
+                    break;
+                }
+            }
+
+            // Teile der Benutzerantwort und der richtigen Antwort
+            if (mismatchIndex !== -1) {
+                const correctInput = userAnswer.substring(0, mismatchIndex); // Korrekte Eingabe bis zum Fehler
+                incorrectPart = userAnswer.substring(mismatchIndex); // Falsche Eingabe ab dem Fehler
+                const correctAnswerPart = correctAnswer.substring(mismatchIndex); // Richtige Antwort ab dem Fehler
+
+                // Färbe nur die Teile ein, die nicht übereinstimmen
+                resultDiv.innerHTML = `${correctInput}<span class="incorrect">${incorrectPart}</span> ist leider falsch. Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: ${correctAnswer.substring(0, mismatchIndex)}<span class="correct">${formatKoreanNumberWithSpaces(correctAnswerPart)}</span>.`;
+            } else {
+                // Wenn die Benutzerantwort kürzer ist als die korrekte Antwort
+                resultDiv.innerHTML = `${userAnswer} ist leider falsch. Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: <span class="correct">${formatKoreanNumberWithSpaces(correctAnswer)}</span>.`;
+            }
+        } else {
+            resultDiv.innerHTML = `Richtig! Gut gemacht. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
+        }
+    }
+
+    function addKeyToInput(key) {
+        const answerField = document.getElementById("answer");
+        answerField.value += key; // Füge den gedrückten Schlüssel zum Eingabefeld hinzu
+        answerField.focus(); // Setze den Fokus auf das Eingabefeld
+    }
+
+    function removeLastCharacter() {
+        const answerField = document.getElementById("answer");
+        answerField.value = answerField.value.slice(0, -1); // Entferne das letzte Zeichen
+    }
+
+    // Generiere die erste Frage sofort
+    generateQuiz();
+</script>
+
+</body>
+</html>
