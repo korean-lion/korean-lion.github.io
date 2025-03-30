@@ -164,7 +164,7 @@ function generateSinokoreanNumber(number) {
     }
 
 function formatKoreanNumberWithSpaces(number) {
-    return number.replace(/(십|백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
+    return number.replace(/(백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
 }
 
     function generateQuiz() {
@@ -180,7 +180,7 @@ function formatKoreanNumberWithSpaces(number) {
         const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
         const correctAnswer = generateSinokoreanNumber(currentNumber); // Korrekte Antwort generieren
         const resultDiv = document.getElementById("result");
-previousNumber = currentNumber
+previousNumber = currentNumber;
 
 // Wenn keine Benutzereingabe gemacht wurde
     if (userAnswer === "") {
