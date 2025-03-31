@@ -116,6 +116,14 @@
 <script>
     let currentNumber; // Die aktuelle Zufallszahl
 
+    // Event Listener für die Enter-Taste im Eingabefeld
+    document.getElementById("answer").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") { // Prüft, ob die Return/Enter-Taste gedrückt wurde
+            event.preventDefault(); // Verhindert das Standardverhalten (z. B. Formular abschicken)
+            checkAnswer(); // Führt die Überprüfung durch
+        }
+    });
+
    // Konvertiert eine Zahl in sino-koreanische Zahlen
 function generateSinokoreanNumber(number) {
   if (typeof number !== 'number' || number % 1 !== 0) {
@@ -180,6 +188,8 @@ function formatKoreanNumberWithSpaces(number) {
         const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
         const correctAnswer = generateSinokoreanNumber(currentNumber); // Korrekte Antwort generieren
         const resultDiv = document.getElementById("result");
+        const correctNumberStr = String(correctAnswer); // Richtige Zahl als String
+        const userInputStr = String(userAnswer); // Benutzer-Eingabe als String
 previousNumber = currentNumber;
 
 // Wenn keine Benutzereingabe gemacht wurde
@@ -203,7 +213,25 @@ previousNumber = currentNumber;
 
         // Vergleiche die Benutzereingabe mit der richtigen Antwort
         if (userAnswer !== correctAnswer && !(correctAnswer in alternativeAnswers && alternativeAnswers[correctAnswer].includes(userAnswer))) {
-            let incorrectPart = '';
+            // Falsche Antwort: Zeichen-für-Zeichen-Vergleich
+            let feedbackUser = "";
+            let feedbackCorrect = "";
+            const maxLength = Math.max(correctNumberStr.length, userInputStr.length);
+
+            for (let i = 0; i < maxLength; i++) {
+                if (userInputStr[i] === correctNumberStr[i]) {
+                    // Richtig eingegebene Stelle in Grün
+                    feedbackUser += `<span style="color: green;">${userInputStr[i] || ""}</span>`;
+                    feedbackCorrect += `<span style="color: green;">${correctNumberStr[i] || ""}</span>`;
+                } else {
+                    // Falsch eingegebene Stelle in Rot
+                    feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
+                    feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
+                }
+               resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
+            //resultDiv.innerHTML='Leider falsch.';
+            }
+            /* let incorrectPart = '';
             let correctPart = '';
 
             const minLength = Math.min(userAnswer.length, correctAnswer.length);
@@ -228,7 +256,7 @@ previousNumber = currentNumber;
             } else {
                 // Wenn die Benutzerantwort kürzer ist als die korrekte Antwort
                 resultDiv.innerHTML = `${userAnswer} ist leider falsch. Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: <span class="correct">${formatKoreanNumberWithSpaces(correctAnswer)}</span>.`;
-            }
+            }*/
         } else {
             resultDiv.innerHTML = `Richtig! Gut gemacht. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
         }
