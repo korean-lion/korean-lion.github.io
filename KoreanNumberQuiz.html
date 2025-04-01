@@ -98,6 +98,12 @@
 <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Setzt sicher, dass keine Radio-Option vorausgewählt ist
+    document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
+      radio.checked = false;
+    });
+  });
   // Event Listener für Radio-Buttons
   document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
     radio.addEventListener('change', function() {
