@@ -30,28 +30,6 @@
       cursor: pointer;
       margin-top: 10px;
     }
-    /*.keyboard {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .keyboard-row {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 5px;
-    }
-    .key {
-      padding: 10px;
-      background-color: #ddd;
-      border: 1px solid #aaa;
-      text-align: center;
-      cursor: pointer;
-      margin: 2px;
-    }
-    .key:hover {
-      background-color: #ccc;
-    }*/
     #answer {
       width: 50%; /* Eingabefeld auf 50% der Breite setzen */
       padding: 10px;
@@ -68,47 +46,6 @@
 </div>
 <button id="nextButton" onclick="checkAnswer()">Antwort überprüfen</button>
 <div class="result" id="result"></div>
-
-<!--<div class="keyboard">
-  <div class="keyboard-row">
-    <div class="key" onclick="addKeyToInput('곱')">곱</div>
-    <div class="key" onclick="addKeyToInput('나')">나</div>
-    <div class="key" onclick="addKeyToInput('넷')">넷</div>
-    <div class="key" onclick="addKeyToInput('다')">다</div>
-    <div class="key" onclick="addKeyToInput('덟')">덟</div>
-    <div class="key" onclick="addKeyToInput('둘')">둘</div>
-    <div class="key" onclick="addKeyToInput('든')">든</div>
-  </div>
-  <div class="keyboard-row">
-    <div class="key" onclick="addKeyToInput('른')">른</div>
-    <div class="key" onclick="addKeyToInput('마')">마</div>
-    <div class="key" onclick="addKeyToInput('물')">물</div>
-    <div class="key" onclick="addKeyToInput('백')">백</div>
-    <div class="key" onclick="addKeyToInput('하')">하</div>
-    <div class="key" onclick="addKeyToInput('홉')">홉</div>
-    <div class="key" onclick="addKeyToInput('흔')">흔</div>
-  </div>
-  <div class="keyboard-row">
-    <div class="key" onclick="addKeyToInput('서')">서</div>
-    <div class="key" onclick="addKeyToInput('섯')">섯</div>
-    <div class="key" onclick="addKeyToInput('순')">순</div>
-    <div class="key" onclick="addKeyToInput('쉰')">쉰</div>
-    <div class="key" onclick="addKeyToInput('스')">스</div>
-    <div class="key" onclick="addKeyToInput('셋')">셋</div>
-  </div>
-  <div class="keyboard-row">
-    <div class="key" onclick="addKeyToInput('아')">아</div>
-    <div class="key" onclick="addKeyToInput('여')">여</div>
-    <div class="key" onclick="addKeyToInput('열')">열</div>
-    <div class="key" onclick="addKeyToInput('영')">영</div>
-    <div class="key" onclick="addKeyToInput('일')">일</div>
-    <div class="key" onclick="addKeyToInput('예')">예</div>
-  </div>
-  <div class="keyboard-row">
-    <div class="key" onclick="removeLastCharacter()">Backspace</div>
-    <div class="key" onclick="addKeyToInput(' ');">Space</div>
-  </div>
-</div>-->
 
 <script>
   const numbers = {
@@ -247,9 +184,6 @@
       generateQuiz(); // Nächste Frage generieren
       return; // Beende die Funktion hier
     }
-
-    // Generiere sofort eine neue Frage
-    //generateQuiz();
 
     // Vergleiche die Benutzereingabe mit der richtigen Antwort
     if (userAnswer != correctAnswer) {
