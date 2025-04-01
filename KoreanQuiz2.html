@@ -191,7 +191,7 @@
       let feedbackUser = "";
       let feedbackCorrect = "";
       const maxLength = Math.max(correctNumberStr.length, userInputStr.length);
-      resultDiv.innerHTML=`${userAnswer} ungleich ${correctAnswer}`;
+
       for (let i = 0; i < maxLength; i++) {
         if (userInputStr[i] === correctNumberStr[i]) {
           // Richtig eingegebene Stelle in Grün
