@@ -35,6 +35,17 @@
       font-size: 16px;
       width: 50%; /* Gleiche Größe wie im vorherigen Quiz */
     }
+    td {
+      padding: 5px;
+      white-space: normal;
+      word-break: normal;  /* Keine Trennung inmitten eines Wortes */
+      overflow-wrap: break-word; /* Bricht sehr lange Wörter, um sie innerhalb des Containers zu halten */
+    }
+    table {
+      margin: auto;
+      border-collapse: collapse;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -133,13 +144,26 @@
     const resultDiv = document.getElementById("result");
     const correctNumberStr = String(correctAnswer); // Richtige Zahl als String
     const userInputStr = String(userAnswer); // Benutzer-Eingabe als String
-    previousSinoNumber = currentSinoNumber;
+    let previousSinoNumber = currentSinoNumber;
     //resultDiv.innerText = `Die richtige Antwort für ${formatKoreanNumberWithSpaces(previousSinoNumberNumber)} ist: ${formatNumberWithThousandSeparator(correctNumberStr)}.`;
 // Wenn keine Benutzereingabe gemacht wurde
     if (userAnswer === "") {
 // Generiere sofort eine neue Frage
       generateQuiz();
-       resultDiv.innerHTML = `Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
+      resultDiv.innerHTML = `
+              <table>
+                <tr>
+                  <td style="font-size: 16px;
+">Sinokoreanische Zahl:</td>
+                  <td>${formatKoreanNumberWithSpaces(previousSinoNumber)}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${formatNumberWithThousandSeparator(correctAnswer)}</td>
+                </tr>
+              </table>
+            `;
+       //resultDiv.innerHTML = `Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
        return; // Beende die Funktion hier
     }
 
@@ -156,7 +180,20 @@
 
     if (userInputStr === correctNumberStr) {
       // Richtige Antwort
-      resultDiv.innerHTML = `Richtig! Gut gemacht. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
+      resultDiv.innerHTML = `
+              <p>Richtig! Gut gemacht.</p>
+              <table>
+                <tr>
+                  <td style="font-size: 16px;">Sinokoreanische Zahl:</td>
+                  <td>${formatKoreanNumberWithSpaces(previousSinoNumber)}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${formatNumberWithThousandSeparator(correctAnswer)}</td>
+                </tr>
+              </table>
+            `;
+      //resultDiv.innerHTML = `Richtig! Gut gemacht. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
     } else {
       // Falsche Antwort: Zeichen-für-Zeichen-Vergleich
       let feedbackUser = "";
@@ -174,8 +211,24 @@
           feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
         }
       }
-
-      resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
+      resultDiv.innerHTML = `
+              <p>Leider falsch.</p>
+              <table>
+                <tr>
+                  <td style="font-size: 16px;">Sinokoreanische Zahl:</td>
+                  <td>${formatKoreanNumberWithSpaces(previousSinoNumber)}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${formatNumberWithThousandSeparator(feedbackCorrect)}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Eingegebene Zahl:</td>
+                  <td>${feedbackUser}</td>
+                </tr>
+              </table>
+            `;
+      //resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
     }
   }
 
