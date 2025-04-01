@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz-Auswahl</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      text-align: center;
+      color: #333;
+    }
+
+    h1 {
+      margin-top: 50px;
+      font-size: 2.5rem;
+    }
+
+    form {
+      margin-top: 50px;
+      text-align: left; /* Aufzählung linksbündig machen */
+      max-width: 400px; /* Begrenzte Breite für das Formular */
+      margin-left: auto; /* Zentriert das Formular horizontal */
+      margin-right: auto; /* Zentriert das Formular horizontal */
+    }
+
+    .option {
+      margin: 20px 0;
+      font-size: 1.5rem;
+    }
+
+    #startButton {
+      margin-top: 30px;
+      font-size: 1.2rem;
+      color: #fff;
+      background-color: #0078D7;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    #startButton:hover {
+      background-color: #005fb8;
+    }
+
+    #quizFrame {
+      margin-top: 50px;
+      width: 80%;
+      height: 500px;
+      border: 2px solid #0078D7;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<h1>Wähle ein Quiz</h1>
+<form id="quizForm">
+  <div class="option">
+    <input type="radio" id="quiz1" name="quiz" value="KoreanQuiz.html" required>
+    <label for="quiz1">dezimal → koreanisch</label>
+  </div>
+  <div class="option">
+    <input type="radio" id="quiz2" name="quiz" value="KoreanQuiz2.html">
+    <label for="quiz2">koreanisch → dezimal</label>
+  </div>
+  <div class="option">
+    <input type="radio" id="quiz3" name="quiz" value="SinokoreanQuiz.html">
+    <label for="quiz3">dezimal → sinokoreanisch</label>
+  </div>
+  <div class="option">
+    <input type="radio" id="quiz4" name="quiz" value="SinokoreanQuiz2.html">
+    <label for="quiz4">sinokoreanisch → dezimal</label>
+  </div>
+  <button type="submit" id="startButton">Quiz starten</button>
+</form>
+
+<!-- Der Bereich, in dem das Quiz geladen wird -->
+<iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
+
+<script>
+  // Event Listener für das Formular
+  document.getElementById('quizForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Verhindert das Standardverhalten (Neuladen der Seite)
+
+    // Wähle die URL des ausgewählten Quizzes
+    const selectedQuiz = document.querySelector('input[name="quiz"]:checked').value;
+
+    // Lade das Quiz in das iframe
+    const quizFrame = document.getElementById('quizFrame');
+    quizFrame.src = selectedQuiz;
+    quizFrame.hidden = false; // Blendet das iframe ein
+  });
+</script>
+</body>
+</html>
