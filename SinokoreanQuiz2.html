@@ -122,9 +122,9 @@
     const maxRange = parseInt(rangeSelect.value); // Maximalen Bereich aus der Auswahl abrufen
     currentNumber = Math.floor(Math.random() * (maxRange + 1)); // Zufallszahl zwischen 0 und maxRange
     currentSinoNumber = generateSinokoreanNumber(currentNumber);
-    document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${currentSinoNumber}?`;
+    document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${formatKoreanNumberWithSpaces(currentSinoNumber)}?`;
     document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
-    document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
+    document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen(
   }
 
   function checkAnswer() {
