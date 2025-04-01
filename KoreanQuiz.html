@@ -7,18 +7,35 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
             padding: 20px;
-            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center; /* Zentriert den Container horizontal */
+            align-items: flex-start; /* Top-Ausrichtung vertikal */
+            height: 100%; /* Für Flexbox-Anpassung */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%; /* Nimmt die volle Breite */
+            max-width: 800px; /* Begrenzter Max-Bereich */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #f4f4f9;
         }
         h1{
             font-size: 1.5rem;
+            margin-top: 0;
         }
         .question-container {
             display: flex;
             flex-direction: column; /* Inhalte untereinander */
             align-items: flex-start; /* Links ausrichten */
             margin-bottom: 20px;
+            margin-top: 20px;
+            gap: 10px;
         }
         .question {
             margin-right: 10px; /* Abstand zwischen Frage und Eingabefeld */
@@ -64,6 +81,7 @@
         }
         td {
              padding: 5px;
+             vertical-align: top; /* Text oben ausrichten */
              white-space: normal;
              word-break: normal;  /* Keine Trennung inmitten eines Wortes */
              overflow-wrap: break-word; /* Bricht sehr lange Wörter, um sie innerhalb des Containers zu halten */
@@ -76,7 +94,7 @@
     </style>
 </head>
 <body>
-
+<div class="container">
 <h1>Koreanisches Zahlenquiz</h1>
 <div class="question-container">
     <div class="question" id="question"></div>
@@ -356,6 +374,6 @@
     // Quiz und Tastatur generieren
     generateQuiz();
 </script>
-
+</div>
 </body>
 </html>
