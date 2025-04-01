@@ -19,31 +19,15 @@
 
     form {
       margin-top: 50px;
-      text-align: left; /* Aufzählung linksbündig machen */
-      max-width: 400px; /* Begrenzte Breite für das Formular */
-      margin-left: auto; /* Zentriert das Formular horizontal */
-      margin-right: auto; /* Zentriert das Formular horizontal */
+      text-align: left;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .option {
       margin: 20px 0;
       font-size: 1.5rem;
-    }
-
-    #startButton {
-      margin-top: 30px;
-      font-size: 1.2rem;
-      color: #fff;
-      background-color: #0078D7;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
-    }
-
-    #startButton:hover {
-      background-color: #005fb8;
     }
 
     #quizFrame {
@@ -74,24 +58,23 @@
     <input type="radio" id="quiz4" name="quiz" value="SinokoreanQuiz2.html">
     <label for="quiz4">sinokoreanisch → dezimal</label>
   </div>
-  <button type="submit" id="startButton">Quiz starten</button>
 </form>
 
 <!-- Der Bereich, in dem das Quiz geladen wird -->
 <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
 <script>
-  // Event Listener für das Formular
-  document.getElementById('quizForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Verhindert das Standardverhalten (Neuladen der Seite)
+  // Event Listener für Radio-Buttons
+  document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      // Sobald eine Auswahl getroffen wird, lade das Quiz
+      const selectedQuiz = this.value;
 
-    // Wähle die URL des ausgewählten Quizzes
-    const selectedQuiz = document.querySelector('input[name="quiz"]:checked').value;
-
-    // Lade das Quiz in das iframe
-    const quizFrame = document.getElementById('quizFrame');
-    quizFrame.src = selectedQuiz;
-    quizFrame.hidden = false; // Blendet das iframe ein
+      // Lade das Quiz in das iframe
+      const quizFrame = document.getElementById('quizFrame');
+      quizFrame.src = selectedQuiz;
+      quizFrame.hidden = false; // Blende das iframe ein
+    });
   });
 </script>
 </body>
