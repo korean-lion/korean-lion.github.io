@@ -35,7 +35,10 @@
         #answer {
             padding: 10px;
             font-size: 16px;
-            width: 50%;
+            width: 100%; /* Nimmt die volle verfügbare Breite */
+            max-width: 800px; /* Maximale Breite auf 800px begrenzen */
+            box-sizing: border-box; /* Innenabstand in die Breite einbeziehen */
+            margin-top: 10px; /* Optional: etwas Platz über dem Eingabeformular */
         }
         .keyboard {
             margin-top: 20px;
