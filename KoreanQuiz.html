@@ -57,6 +57,17 @@
             padding: 10px;
             font-size: 16px;
         }
+        td {
+             padding: 5px;
+             white-space: normal;
+             word-break: normal;  /* Keine Trennung inmitten eines Wortes */
+             overflow-wrap: break-word; /* Bricht sehr lange Wörter, um sie innerhalb des Containers zu halten */
+         }
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -227,7 +238,7 @@
     });
 
     function generateQuiz() {
-        currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generierenss
+        currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generieren
         document.getElementById("question").innerText = `Was ist die koreanische Zahl für ${currentNumber}?`;
        // document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
         document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
@@ -244,11 +255,24 @@
         const correctNumberStr = String(correctAnswer); // Richtige Zahl als String
         const userInputStr = String(userAnswer); // Benutzer-Eingabe als String
         const answer = numbers[currentNumber];//mit Leerzeichen
-        previousNumber = currentNumber;
+        let previousNumber = currentNumber;
 
     // Wenn keine Benutzereingabe gemacht wurde
         if (userAnswer === "") {
-            resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${answer}.`;
+            resultDiv.innerHTML = `
+              <table>
+                <tr>
+                  <td style="font-size: 16px;
+">Dezimalzahl:</td>
+                  <td>${currentNumber}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Koreanische Zahl:</td>
+                  <td>${answer}</td>
+                </tr>
+              </table>
+            `;
+           // resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${answer}.`;
             generateQuiz(); // Nächste Frage generieren
             return; // Beende die Funktion hier
         }
@@ -275,19 +299,18 @@
                 }
                 resultDiv.innerHTML = `
               <p>Leider falsch.</p>
-              <table style="margin: auto; border-collapse: collapse;width: 100%;">
+              <table>
                 <tr>
-                  <td style="padding: 5px;font-size: 16px;
-">Dezimalzahl:</td>
-                  <td style="padding: 5px;">${previousNumber}</td>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${previousNumber}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 5px;font-size: 16px;">Koreanische Zahl:</td>
-                  <td style="padding: 5px; ">${formatKoreanAnswer(feedbackCorrect)}</td>
+                  <td style="font-size: 16px;">Koreanische Zahl:</td>
+                  <td>${formatKoreanAnswer(feedbackCorrect)}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 5px;font-size: 16px;">Eingegebene Zahl:</td>
-                  <td style="padding: 5px; ">${formatKoreanAnswer(feedbackUser)}</td>
+                  <td style="font-size: 16px;">Eingegebene Zahl:</td>
+                  <td>${formatKoreanAnswer(feedbackUser)}</td>
                 </tr>
               </table>
             `;
@@ -296,15 +319,14 @@
         } else {
             resultDiv.innerHTML = `
               <p>Richtig! Gut gemacht.</p>
-              <table style="margin: auto; border-collapse: collapse;width: 100%;">
+              <table>
                 <tr>
-                  <td style="padding: 5px;font-size: 16px;
-">Dezimalzahl:</td>
-                  <td style="padding: 5px;">${previousNumber}</td>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${previousNumber}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 5px;font-size: 16px;">Koreanische Zahl:</td>
-                  <td style="padding: 5px; ">${answer}</td>
+                  <td style="font-size: 16px;">Koreanische Zahl:</td>
+                  <td>${answer}</td>
                 </tr>
               </table>
             `;

@@ -35,6 +35,17 @@
       padding: 10px;
       font-size: 16px;
     }
+    td {
+      padding: 5px;
+      white-space: normal;
+      word-break: normal;  /* Keine Trennung inmitten eines Wortes */
+      overflow-wrap: break-word; /* Bricht sehr lange Wörter, um sie innerhalb des Containers zu halten */
+    }
+    table {
+       margin: auto;
+       border-collapse: collapse;
+       width: 100%;
+     }
   </style>
 </head>
 <body>
@@ -180,7 +191,20 @@
 
     // Wenn keine Benutzereingabe gemacht wurde
     if (userAnswer === "") {
-      resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${previousNumber}.`;
+      resultDiv.innerHTML = `
+              <table>
+                <tr>
+                  <td style="font-size: 16px;
+">Koreanische Zahl:</td>
+                  <td>${numbers[currentNumber]}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Koreanische Zahl:</td>
+                  <td>${currentNumber}</td>
+                </tr>
+              </table>
+            `;
+      //resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${previousNumber}.`;
       generateQuiz(); // Nächste Frage generieren
       return; // Beende die Funktion hier
     }
@@ -203,10 +227,40 @@
           feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
         }
 
-        resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${previousNumber} lautet ${feedbackCorrect}`;
+        resultDiv.innerHTML = `
+              <p>Leider falsch.</p>
+              <table>
+                <tr>
+                  <td style="font-size: 16px;">Koreanische Zahl:</td>
+                  <td>${previousNumber}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${feedbackCorrect}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Eingegebene Zahl:</td>
+                  <td>${feedbackUser}</td>
+                </tr>
+              </table>
+            `;
+        //resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${previousNumber} lautet ${feedbackCorrect}`;
       }
     } else {
-      resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${correctAnswer}.`;
+      resultDiv.innerHTML = `
+              <p>Richtig! Gut gemacht.</p>
+              <table>
+                <tr>
+                  <td style="font-size: 16px;">Koreanische Zahl:</td>
+                  <td>${previousNumber}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${correctAnswer}</td>
+                </tr>
+              </table>
+            `;
+      //resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${correctAnswer}.`;
     }
 
     currentInput = ''; // Eingabe zurücksetzen

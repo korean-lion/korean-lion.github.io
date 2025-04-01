@@ -62,6 +62,17 @@
         .key:hover {
             background-color: #ccc;
         }
+        td {
+            padding: 5px;
+            white-space: normal;
+            word-break: normal;  /* Keine Trennung inmitten eines Wortes */
+            overflow-wrap: break-word; /* Bricht sehr lange Wörter, um sie innerhalb des Containers zu halten */
+        }
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -189,15 +200,27 @@ function formatKoreanNumberWithSpaces(number) {
         const resultDiv = document.getElementById("result");
         const correctNumberStr = String(correctAnswer); // Richtige Zahl als String
         const userInputStr = String(userAnswer); // Benutzer-Eingabe als String
-previousNumber = currentNumber;
+        let previousNumber = currentNumber;
 
-// Wenn keine Benutzereingabe gemacht wurde
-    if (userAnswer === "") {
-// Generiere sofort eine neue Frage
-        generateQuiz();
-        resultDiv.innerHTML = `Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
-        return; // Beende die Funktion hier
-    }
+    // Wenn keine Benutzereingabe gemacht wurde
+        if (userAnswer === "") {
+    // Generiere sofort eine neue Frage
+            generateQuiz();
+            resultDiv.innerHTML = `
+              <table>
+                <tr>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${formatNumberWithThousandSeparator(previousNumber)}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Sinokoreanische Zahl:</td>
+                  <td>${formatKoreanNumberWithSpaces(correctAnswer)}</td>
+                </tr>
+              </table>
+            `;
+            //resultDiv.innerHTML = `Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
+            return; // Beende die Funktion hier
+        }
         // Alternative Antworten für 100, 1000, 10000 und andere Einheiten
         const alternativeAnswers = {
             "백": ["일백", "백"],
@@ -227,10 +250,41 @@ previousNumber = currentNumber;
                     feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
                     feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
                 }
-               resultDiv.innerHTML = `${formatKoreanNumberWithSpaces(feedbackUser)} ist leider falsch. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(feedbackCorrect)}`;
+                resultDiv.innerHTML = `
+              <p>Leider falsch.</p>
+              <table>
+                <tr>
+                  <td style="font-size: 16px;">Dezimalzahl:</td>
+                  <td>${formatNumberWithThousandSeparator(previousNumber)}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Sinokoreanische Zahl:</td>
+                  <td>${formatKoreanNumberWithSpaces(feedbackCorrect)}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Eingegebene Zahl:</td>
+                  <td>${formatKoreanNumberWithSpaces(feedbackUser)}</td>
+                </tr>
+              </table>
+            `;
+              // resultDiv.innerHTML = `${formatKoreanNumberWithSpaces(feedbackUser)} ist leider falsch. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(feedbackCorrect)}`;
             }
         } else {
-            resultDiv.innerHTML = `Richtig! Gut gemacht. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
+            resultDiv.innerHTML = `
+              <p>Richtig! Gut gemacht.</p>
+              <table>
+                <tr>
+                  <td style="font-size: 16px;
+">Dezimalzahl:</td>
+                  <td>${formatNumberWithThousandSeparator(previousNumber)}</td>
+                </tr>
+                <tr>
+                  <td style="font-size: 16px;">Sinokoreanische Zahl:</td>
+                  <td>${formatKoreanNumberWithSpaces(correctAnswer)}</td>
+                </tr>
+              </table>
+            `;
+            //resultDiv.innerHTML = `Richtig! Gut gemacht. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
         }
     }
 
