@@ -30,7 +30,7 @@
       cursor: pointer;
       margin-top: 10px;
     }
-    .keyboard {
+    /*.keyboard {
       margin-top: 20px;
       display: flex;
       flex-direction: column;
@@ -51,7 +51,7 @@
     }
     .key:hover {
       background-color: #ccc;
-    }
+    }*/
     #answer {
       width: 50%; /* Eingabefeld auf 50% der Breite setzen */
       padding: 10px;
@@ -69,8 +69,8 @@
 <button id="nextButton" onclick="checkAnswer()">Antwort überprüfen</button>
 <div class="result" id="result"></div>
 
-<div class="keyboard">
- <!-- <div class="keyboard-row">
+<!--<div class="keyboard">
+  <div class="keyboard-row">
     <div class="key" onclick="addKeyToInput('곱')">곱</div>
     <div class="key" onclick="addKeyToInput('나')">나</div>
     <div class="key" onclick="addKeyToInput('넷')">넷</div>
@@ -103,12 +103,12 @@
     <div class="key" onclick="addKeyToInput('영')">영</div>
     <div class="key" onclick="addKeyToInput('일')">일</div>
     <div class="key" onclick="addKeyToInput('예')">예</div>
-  </div>-->
+  </div>
   <div class="keyboard-row">
     <div class="key" onclick="removeLastCharacter()">Backspace</div>
     <div class="key" onclick="addKeyToInput(' ');">Space</div>
   </div>
-</div>
+</div>-->
 
 <script>
   const numbers = {
@@ -228,27 +228,22 @@
 
   function generateQuiz() {
     currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generierenss
-    document.getElementById("question").innerText = `Was ist die koreanische Zahl für ${currentNumber}?`;
+    document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${numbers[currentNumber]}?`;
     // document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
     document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
   }
 
-  function formatKoreanAnswer(answer) {
-    return answer.replace(/(열|물|른|흔|쉰|순|든)(?=\S|$)/g, '$1 ').trim(); // Füge ein Leerzeichen hinter den Einheiten hinzu, auch wenn sie am Ende stehen
-  }
-
   function checkAnswer() {
     const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
-    const correctAnswer = numbers[currentNumber].replaceAll(' ', ''); // Alle Leerzeichen entfernen
+    const correctAnswer = currentNumber;//Dezimalzahl
     const resultDiv = document.getElementById("result");
     const correctNumberStr = String(correctAnswer); // Richtige Zahl als String
     const userInputStr = String(userAnswer); // Benutzer-Eingabe als String
-    const answer = numbers[currentNumber];//mit Leerzeichen
-    previousNumber = currentNumber;
+    previousNumber = numbers[currentNumber];
 
     // Wenn keine Benutzereingabe gemacht wurde
     if (userAnswer === "") {
-      resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${answer}.`;
+      resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${previousNumber}.`;
       generateQuiz(); // Nächste Frage generieren
       return; // Beende die Funktion hier
     }
@@ -257,12 +252,12 @@
     //generateQuiz();
 
     // Vergleiche die Benutzereingabe mit der richtigen Antwort
-    if (userAnswer !== correctAnswer) {
+    if (userAnswer != correctAnswer) {
       // Falsche Antwort: Zeichen-für-Zeichen-Vergleich
       let feedbackUser = "";
       let feedbackCorrect = "";
       const maxLength = Math.max(correctNumberStr.length, userInputStr.length);
-
+      resultDiv.innerHTML=`${userAnswer} ungleich ${correctAnswer}`;
       for (let i = 0; i < maxLength; i++) {
         if (userInputStr[i] === correctNumberStr[i]) {
           // Richtig eingegebene Stelle in Grün
@@ -273,10 +268,11 @@
           feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
           feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
         }
-        resultDiv.innerHTML = `${formatKoreanAnswer(feedbackUser)} ist leider falsch. Die koreanische Zahl für ${previousNumber} lautet ${formatKoreanAnswer(feedbackCorrect)}`;
+
+        resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${previousNumber} lautet ${feedbackCorrect}`;
       }
     } else {
-      resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${answer}.`;
+      resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${correctAnswer}.`;
     }
 
     currentInput = ''; // Eingabe zurücksetzen
