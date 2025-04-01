@@ -66,7 +66,7 @@
     }
   });
 
-  // Konvertiert eine Zahl in sino-koreanische Zahlen
+  // Konvertiert eine Zahl in sinokoreanische Zahlen
   function generateSinokoreanNumber(number) {
     if (typeof number !== 'number' || number % 1 !== 0) {
       throw new Error('Die Eingabe muss eine ganze Zahl sein.');
@@ -177,17 +177,6 @@
 
       resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
     }
-  }
-
-  function addKeyToInput(key) {
-    const answerField = document.getElementById("answer");
-    answerField.value += key; // Füge den gedrückten Schlüssel zum Eingabefeld hinzu
-    answerField.focus(); // Setze den Fokus auf das Eingabefeld
-  }
-
-  function removeLastCharacter() {
-    const answerField = document.getElementById("answer");
-    answerField.value = answerField.value.slice(0, -1); // Entferne das letzte Zeichen
   }
 
   // Generiere die erste Frage sofort

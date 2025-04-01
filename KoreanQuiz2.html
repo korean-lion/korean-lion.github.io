@@ -164,7 +164,7 @@
   });
 
   function generateQuiz() {
-    currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generierenss
+    currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generieren
     document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${numbers[currentNumber]}?`;
     // document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
     document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
@@ -211,17 +211,6 @@
 
     currentInput = ''; // Eingabe zurücksetzen
     generateQuiz(); // Nächste Frage generieren
-  }
-
-  function addKeyToInput(key) {
-    const answerField = document.getElementById("answer");
-    answerField.value += key; // Füge den gedrückten Schlüssel zum Eingabefeld hinzu
-    answerField.focus(); // Setze den Fokus auf das Eingabefeld
-  }
-
-  function removeLastCharacter() {
-    const answerField = document.getElementById("answer");
-    answerField.value = answerField.value.slice(0, -1); // Entferne das letzte Zeichen
   }
 
   // Quiz und Tastatur generieren
