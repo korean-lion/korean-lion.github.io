@@ -273,10 +273,42 @@
                     feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
                     feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
                 }
-                resultDiv.innerHTML = `${formatKoreanAnswer(feedbackUser)} ist leider falsch. Die koreanische Zahl für ${previousNumber} lautet ${formatKoreanAnswer(feedbackCorrect)}`;
+                resultDiv.innerHTML = `
+              <p>Leider falsch.</p>
+              <table style="margin: auto; border-collapse: collapse;width: 100%;">
+                <tr>
+                  <td style="padding: 5px;font-size: 16px;
+">Dezimalzahl:</td>
+                  <td style="padding: 5px;">${previousNumber}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px;font-size: 16px;">Koreanische Zahl:</td>
+                  <td style="padding: 5px; ">${formatKoreanAnswer(feedbackCorrect)}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px;font-size: 16px;">Eingegebene Zahl:</td>
+                  <td style="padding: 5px; ">${formatKoreanAnswer(feedbackUser)}</td>
+                </tr>
+              </table>
+            `;
+               // resultDiv.innerHTML = `${formatKoreanAnswer(feedbackUser)} ist leider falsch. Die koreanische Zahl für ${previousNumber} lautet ${formatKoreanAnswer(feedbackCorrect)}`;
             }
         } else {
-            resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${answer}.`;
+            resultDiv.innerHTML = `
+              <p>Richtig! Gut gemacht.</p>
+              <table style="margin: auto; border-collapse: collapse;width: 100%;">
+                <tr>
+                  <td style="padding: 5px;font-size: 16px;
+">Dezimalzahl:</td>
+                  <td style="padding: 5px;">${previousNumber}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px;font-size: 16px;">Koreanische Zahl:</td>
+                  <td style="padding: 5px; ">${answer}</td>
+                </tr>
+              </table>
+            `;
+            //resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${answer}.`;
         }
 
         currentInput = ''; // Eingabe zurücksetzen
