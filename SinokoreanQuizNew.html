@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinokoreanisches Zahlenquiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .question-container {
+            display: flex;
+            align-items: center;
+        }
+        .question {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #answer {
+            padding: 10px;
+            font-size: 16px;
+            width: 50%;
+        }
+        .keyboard {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        .key {
+            padding: 10px;
+            background-color: #ddd;
+            border: 1px solid #aaa;
+            text-align: center;
+            cursor: pointer;
+            margin: 2px;
+        }
+        .key:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+<h1>Sinokoreanisches Zahlenquiz</h1>
+<label for="rangeSelect">Wähle den Zahlenbereich:</label>
+<select id="rangeSelect">
+    <option value="10">0 bis 10</option>
+    <option value="100">0 bis 100</option>
+    <option value="1000">0 bis 1.000</option>
+    <option value="10000">0 bis 10.000</option>
+    <option value="100000000">0 bis 100.000.000</option>
+    <option value="1000000000000">0 bis 1 Billion</option>
+</select>
+<div class="question-container">
+    <div class="question" id="question"></div>
+    <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." readonly />
+</div>
+<button id="nextButton" onclick="checkAnswer()">Antwort überprüfen</button>
+<div class="result" id="result"></div>
+
+<div class="keyboard">
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('영')">영</div>
+        <div class="key" onclick="addKeyToInput('일')">일</div>
+        <div class="key" onclick="addKeyToInput('이')">이</div>
+        <div class="key" onclick="addKeyToInput('삼')">삼</div>
+        <div class="key" onclick="addKeyToInput('사')">사</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('오')">오</div>
+        <div class="key" onclick="addKeyToInput('육')">육</div>
+        <div class="key" onclick="addKeyToInput('칠')">칠</div>
+        <div class="key" onclick="addKeyToInput('팔')">팔</div>
+        <div class="key" onclick="addKeyToInput('구')">구</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('십')">십</div>
+        <div class="key" onclick="addKeyToInput('백')">백</div>
+        <div class="key" onclick="addKeyToInput('천')">천</div>
+        <div class="key" onclick="addKeyToInput('만')">만</div>
+        <div class="key" onclick="addKeyToInput('억')">억</div>
+        <div class="key" onclick="addKeyToInput('조')">조</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="removeLastCharacter()">Backspace</div>
+        <div class="key" onclick="addKeyToInput(' ');">Space</div>
+    </div>
+</div>
+
+<script>
+    function addKeyToInput(key) {
+        const input = document.getElementById('answer');
+        input.value += key; // Zeichen zum Eingabefeld hinzufügen
+    }
+
+    function removeLastCharacter() {
+        const input = document.getElementById('answer');
+        input.value = input.value.slice(0, -1); // Letztes Zeichen entfernen
+    }
+
+    function checkAnswer() {
+        // Antwort logik hier integrieren
+        console.log("Antwort überprüft!");
+    }
+</script>
+</body>
+</html>
