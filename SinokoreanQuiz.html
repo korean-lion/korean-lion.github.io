@@ -33,7 +33,7 @@
         #answer {
             padding: 10px;
             font-size: 16px;
-            width: 50%; /* Gleiche Größe wie im vorherigen Quiz */
+            width: 50%;
         }
         .keyboard {
             margin-top: 20px;
@@ -56,12 +56,6 @@
         }
         .key:hover {
             background-color: #ccc;
-        }
-        .incorrect {
-            color: red; /* Färbt den Text rot */
-        }
-        .correct {
-            color: green; /* Färbt den Text grün */
         }
     </style>
 </head>
@@ -229,34 +223,7 @@ previousNumber = currentNumber;
                     feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
                 }
                resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
-            //resultDiv.innerHTML='Leider falsch.';
             }
-            /* let incorrectPart = '';
-            let correctPart = '';
-
-            const minLength = Math.min(userAnswer.length, correctAnswer.length);
-            let mismatchIndex = -1;
-
-            // Vergleiche Zeichen für Zeichen
-            for (let i = 0; i < minLength; i++) {
-                if (userAnswer[i] !== correctAnswer[i]) {
-                    mismatchIndex = i;
-                    break;
-                }
-            }
-
-            // Teile der Benutzerantwort und der richtigen Antwort
-            if (mismatchIndex !== -1) {
-                const correctInput = userAnswer.substring(0, mismatchIndex); // Korrekte Eingabe bis zum Fehler
-                incorrectPart = userAnswer.substring(mismatchIndex); // Falsche Eingabe ab dem Fehler
-                const correctAnswerPart = correctAnswer.substring(mismatchIndex); // Richtige Antwort ab dem Fehler
-
-                // Färbe nur die Teile ein, die nicht übereinstimmen
-                resultDiv.innerHTML = `${correctInput}<span class="incorrect">${incorrectPart}</span> ist leider falsch. Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: ${correctAnswer.substring(0, mismatchIndex)}<span class="correct">${formatKoreanNumberWithSpaces(correctAnswerPart)}</span>.`;
-            } else {
-                // Wenn die Benutzerantwort kürzer ist als die korrekte Antwort
-                resultDiv.innerHTML = `${userAnswer} ist leider falsch. Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: <span class="correct">${formatKoreanNumberWithSpaces(correctAnswer)}</span>.`;
-            }*/
         } else {
             resultDiv.innerHTML = `Richtig! Gut gemacht. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
         }

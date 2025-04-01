@@ -11,18 +11,35 @@
             padding: 20px;
             background-color: #f4f4f4;
         }
+        .question-container {
+            display: flex;
+            align-items: center; /* Vertikale Ausrichtung */
+        }
         .question {
-            margin-bottom: 10px;
+            margin-right: 10px; /* Abstand zwischen Frage und Eingabefeld */
+            font-size: 20px;
         }
         .result {
             margin-top: 20px;
             font-weight: bold;
+            font-size: 24px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
         }
         .keyboard {
             margin-top: 20px;
             display: flex;
-            justify-content: center; /* Zentriert die Tastatur */
-            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: center;
+        }
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
         }
         .key {
             padding: 10px;
@@ -30,50 +47,67 @@
             border: 1px solid #aaa;
             text-align: center;
             cursor: pointer;
-            margin: 2px; /* Abstand zwischen den Tasten */
+            margin: 2px;
         }
         .key:hover {
             background-color: #ccc;
-        }
-        .keyboard-row {
-            display: flex;
-            justify-content: center; /* Zentriert die Tasten in der Reihe */
         }
         #answer {
             width: 50%; /* Eingabefeld auf 50% der Breite setzen */
             padding: 10px;
             font-size: 16px;
         }
-        .incorrect {
-            color: red; /* Färbt den Text rot */
-        }
-        .correct {
-            color: green; /* Färbt den Text grün */
-        }
     </style>
 </head>
 <body>
 
 <h1>Koreanisches Zahlenquiz</h1>
-<div id="quiz"></div>
-<button id="checkButton" onclick="checkAnswer()">Antwort überprüfen</button>
-
+<div class="question-container">
+    <div class="question" id="question"></div>
+    <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." />
+</div>
+<button id="nextButton" onclick="checkAnswer()">Antwort überprüfen</button>
 <div class="result" id="result"></div>
 
 <div class="keyboard">
-    <div class="keyboard-row" id="keyboard1"></div>
-</div>
-<div class="keyboard">
-    <div class="keyboard-row" id="keyboard2"></div>
-</div>
-<div class="keyboard">
-    <div class="keyboard-row" id="keyboard3"></div>
-</div>
-<div class="keyboard">
-    <div class="keyboard-row" id="keyboard4"></div>
-</div>
-<div class="keyboard">
-    <div class="keyboard-row" id="keyboard5"></div>
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('곱')">곱</div>
+        <div class="key" onclick="addKeyToInput('나')">나</div>
+        <div class="key" onclick="addKeyToInput('넷')">넷</div>
+        <div class="key" onclick="addKeyToInput('다')">다</div>
+        <div class="key" onclick="addKeyToInput('덟')">덟</div>
+        <div class="key" onclick="addKeyToInput('둘')">둘</div>
+        <div class="key" onclick="addKeyToInput('든')">든</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('른')">른</div>
+        <div class="key" onclick="addKeyToInput('마')">마</div>
+        <div class="key" onclick="addKeyToInput('물')">물</div>
+        <div class="key" onclick="addKeyToInput('백')">백</div>
+        <div class="key" onclick="addKeyToInput('하')">하</div>
+        <div class="key" onclick="addKeyToInput('홉')">홉</div>
+        <div class="key" onclick="addKeyToInput('흔')">흔</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('서')">서</div>
+        <div class="key" onclick="addKeyToInput('섯')">섯</div>
+        <div class="key" onclick="addKeyToInput('순')">순</div>
+        <div class="key" onclick="addKeyToInput('쉰')">쉰</div>
+        <div class="key" onclick="addKeyToInput('스')">스</div>
+        <div class="key" onclick="addKeyToInput('셋')">셋</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="addKeyToInput('아')">아</div>
+        <div class="key" onclick="addKeyToInput('여')">여</div>
+        <div class="key" onclick="addKeyToInput('열')">열</div>
+        <div class="key" onclick="addKeyToInput('영')">영</div>
+        <div class="key" onclick="addKeyToInput('일')">일</div>
+        <div class="key" onclick="addKeyToInput('예')">예</div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key" onclick="removeLastCharacter()">Backspace</div>
+        <div class="key" onclick="addKeyToInput(' ');">Space</div>
+    </div>
 </div>
 
 <script>
@@ -184,159 +218,84 @@
     let currentNumber;
     let currentInput = '';
 
+    // Event Listener für die Enter-Taste im Eingabefeld
+    document.getElementById("answer").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") { // Prüft, ob die Return/Enter-Taste gedrückt wurde
+            event.preventDefault(); // Verhindert das Standardverhalten (z. B. Formular abschicken)
+            checkAnswer(); // Führt die Überprüfung durch
+        }
+    });
+
     function generateQuiz() {
-        currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generieren
-        const quizDiv = document.getElementById('quiz');
-        quizDiv.innerHTML = `Was ist die koreanische Zahl für ${currentNumber}? <input type="text" style="width:50%;" id="answer" value="${currentInput}" />`;
+        currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generierenss
+        document.getElementById("question").innerText = `Was ist die koreanische Zahl für ${currentNumber}?`;
+       // document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
+        document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
     }
 
-function formatKoreanAnswer(answer) {
-    return answer.replace(/(열|물|른|흔|쉰|순|든)(?=\S|$)/g, '$1 '); // Füge ein Leerzeichen hinter den Einheiten hinzu, auch wenn sie am Ende stehen
-}
+    function formatKoreanAnswer(answer) {
+        return answer.replace(/(열|물|른|흔|쉰|순|든)(?=\S|$)/g, '$1 ').trim(); // Füge ein Leerzeichen hinter den Einheiten hinzu, auch wenn sie am Ende stehen
+    }
 
     function checkAnswer() {
-        const userAnswer = currentInput.replaceAll(' ', ''); // Alle Leerzeichen entfernen
-const answer = numbers[currentNumber];
+        const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
         const correctAnswer = numbers[currentNumber].replaceAll(' ', ''); // Alle Leerzeichen entfernen
-        const resultDiv = document.getElementById('result');
+        const resultDiv = document.getElementById("result");
+        const correctNumberStr = String(correctAnswer); // Richtige Zahl als String
+        const userInputStr = String(userAnswer); // Benutzer-Eingabe als String
+        const answer = numbers[currentNumber];//mit Leerzeichen
+        previousNumber = currentNumber;
 
-// Wenn keine Benutzereingabe gemacht wurde
-    if (userAnswer === "") {
-        resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${answer}.`;
-generateQuiz(); // Nächste Frage generieren
-        return; // Beende die Funktion hier
-    }
+    // Wenn keine Benutzereingabe gemacht wurde
+        if (userAnswer === "") {
+            resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${answer}.`;
+            generateQuiz(); // Nächste Frage generieren
+            return; // Beende die Funktion hier
+        }
+
+        // Generiere sofort eine neue Frage
+        //generateQuiz();
 
         // Vergleiche die Benutzereingabe mit der richtigen Antwort
         if (userAnswer !== correctAnswer) {
-            let incorrectPart = '';
-            let correctPart = '';
+            // Falsche Antwort: Zeichen-für-Zeichen-Vergleich
+            let feedbackUser = "";
+            let feedbackCorrect = "";
+            const maxLength = Math.max(correctNumberStr.length, userInputStr.length);
 
-            const minLength = Math.min(userAnswer.length, correctAnswer.length);
-            let mismatchIndex = -1;
-
-            // Vergleiche Zeichen für Zeichen
-            for (let i = 0; i < minLength; i++) {
-                if (userAnswer[i] !== correctAnswer[i]) {
-                    mismatchIndex = i;
-                    break;
+            for (let i = 0; i < maxLength; i++) {
+                if (userInputStr[i] === correctNumberStr[i]) {
+                    // Richtig eingegebene Stelle in Grün
+                    feedbackUser += `<span style="color: green;">${userInputStr[i] || ""}</span>`;
+                    feedbackCorrect += `<span style="color: green;">${correctNumberStr[i] || ""}</span>`;
+                } else {
+                    // Falsch eingegebene Stelle in Rot
+                    feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
+                    feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
                 }
+                resultDiv.innerHTML = `${formatKoreanAnswer(feedbackUser)} ist leider falsch. Die koreanische Zahl für ${previousNumber} lautet ${formatKoreanAnswer(feedbackCorrect)}`;
             }
-
-            // Teile der Benutzerantwort und der richtigen Antwort
-            if (mismatchIndex !== -1) {
-                const correctInput = userAnswer.substring(0, mismatchIndex); // Korrekte Eingabe bis zum Fehler
-                incorrectPart = userAnswer.substring(mismatchIndex); // Falsche Eingabe ab dem Fehler
-                const correctAnswerPart = correctAnswer.substring(mismatchIndex); // Richtige Antwort ab dem Fehler
- 
-                // Färbe nur die Teile ein, die nicht übereinstimmen
-            resultDiv.innerHTML = `${formatKoreanAnswer(correctInput)}<span class="incorrect">${formatKoreanAnswer(incorrectPart)}</span> ist leider falsch. Die richtige Antwort für ${currentNumber} ist: ${formatKoreanAnswer(correctAnswer.substring(0, mismatchIndex))}<span class="correct">${formatKoreanAnswer(correctAnswerPart)}</span>.`;
         } else {
-            // Wenn die Benutzerantwort kürzer ist als die korrekte Antwort
-            resultDiv.innerHTML = `${formatKoreanAnswer(userAnswer)} ist leider falsch. Die richtige Antwort für ${currentNumber} ist: <span class="correct">${formatKoreanAnswer(correctAnswer)}</span>.`;
+            resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${answer}.`;
         }
-    } else {
-        resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${currentNumber} lautet ${formatKoreanAnswer(correctAnswer)}.`;
-    }
+
         currentInput = ''; // Eingabe zurücksetzen
         generateQuiz(); // Nächste Frage generieren
     }
 
     function addKeyToInput(key) {
-        currentInput += key; // Buchstaben zum Eingabefeld hinzufügen
-        updateInputField(); // Eingabefeld aktualisieren
+        const answerField = document.getElementById("answer");
+        answerField.value += key; // Füge den gedrückten Schlüssel zum Eingabefeld hinzu
+        answerField.focus(); // Setze den Fokus auf das Eingabefeld
     }
 
     function removeLastCharacter() {
-        currentInput = currentInput.slice(0, -1); // Letzten Buchstaben entfernen
-        updateInputField(); // Eingabefeld aktualisieren
-    }
-
-    function updateInputField() {
-        const inputField = document.getElementById('answer');
-        inputField.value = currentInput; // Eingabefeld mit aktuellem Text aktualisieren
-    }
-
-    function generateKeyboard() {
-        const keyboardDiv1 = document.getElementById('keyboard1');
-        const keyboardDiv2 = document.getElementById('keyboard2');
-        const keyboardDiv3 = document.getElementById('keyboard3');
-        const keyboardDiv4 = document.getElementById('keyboard4');
-        const keyboardDiv5 = document.getElementById('keyboard5');
-
-        const keys1 = ['곱', '나', '넷', '다', '덟', '둘', '든'];
-        const keys2 = ['른', '마', '물', '백', '하', '홉', '흔'];
-        const keys3 = ['서', '섯', '순', '쉰', '스', '셋'];
-        const keys4 = ['아', '여', '열', '영', '일', '예'];
-        const keys5 = ['Space', 'Backspace']; // Leertaste mit "Space" beschriftet
-
-        keys1.forEach(key => {
-            const keyDiv = document.createElement('div');
-            keyDiv.classList.add('key');
-            keyDiv.innerText = key;
-            keyDiv.onclick = () => {
-                addKeyToInput(key);
-                updateInputField(); // Eingabefeld aktualisieren
-            };
-            keyboardDiv1.appendChild(keyDiv);
-        });
-
-        keys2.forEach(key => {
-            const keyDiv = document.createElement('div');
-            keyDiv.classList.add('key');
-            keyDiv.innerText = key;
-            keyDiv.onclick = () => {
-                addKeyToInput(key);
-                updateInputField(); // Eingabefeld aktualisieren
-            };
-            keyboardDiv2.appendChild(keyDiv);
-        });
-
-        keys3.forEach(key => {
-            const keyDiv = document.createElement('div');
-            keyDiv.classList.add('key');
-            keyDiv.innerText = key;
-            keyDiv.onclick = () => {
-                addKeyToInput(key);
-                updateInputField(); // Eingabefeld aktualisieren
-            };
-            keyboardDiv3.appendChild(keyDiv);
-        });
-
-        keys4.forEach(key => {
-            const keyDiv = document.createElement('div');
-            keyDiv.classList.add('key');
-            keyDiv.innerText = key;
-            keyDiv.onclick = () => {
-                addKeyToInput(key);
-                updateInputField(); // Eingabefeld aktualisieren
-            };
-            keyboardDiv4.appendChild(keyDiv);
-        });
-
-        // Backspace-Taste hinzufügen
-        const backspaceDiv = document.createElement('div');
-        backspaceDiv.classList.add('key');
-        backspaceDiv.innerText = 'Backspace';
-        backspaceDiv.onclick = () => {
-            removeLastCharacter(); // Letzten Buchstaben entfernen
-        };
-        keyboardDiv5.appendChild(backspaceDiv); // Backspace-Taste zur letzten Reihe hinzufügen
-
-        // Leertaste hinzufügen
-        const spaceDiv = document.createElement('div');
-        spaceDiv.classList.add('key');
-        spaceDiv.innerText = 'Space';
-        spaceDiv.onclick = () => {
-            addKeyToInput(' '); // Leertaste hinzufügen
-            updateInputField(); // Eingabefeld aktualisieren
-        };
-        keyboardDiv5.appendChild(spaceDiv); // Leertaste zur letzten Reihe hinzufügen
+        const answerField = document.getElementById("answer");
+        answerField.value = answerField.value.slice(0, -1); // Entferne das letzte Zeichen
     }
 
     // Quiz und Tastatur generieren
     generateQuiz();
-    generateKeyboard();
 </script>
 
 </body>
