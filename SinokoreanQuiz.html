@@ -73,7 +73,7 @@
 </select>
 <div class="question-container">
     <div class="question" id="question"></div>
-    <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." />
+    <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." readonly />
 </div>
 <button id="nextButton" onclick="checkAnswer()">Antwort überprüfen</button>
 <div class="result" id="result"></div>
@@ -222,7 +222,7 @@ previousNumber = currentNumber;
                     feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
                     feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
                 }
-               resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
+               resultDiv.innerHTML = `${formatKoreanNumberWithSpaces(feedbackUser)} ist leider falsch. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(feedbackCorrect)}`;
             }
         } else {
             resultDiv.innerHTML = `Richtig! Gut gemacht. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
