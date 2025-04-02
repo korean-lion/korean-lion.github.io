@@ -8,22 +8,8 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f9;
-      margin: 0; /* Entferne Standard-Abstände des Browsers */
-      /*height: 100vh; /* Der Body nimmt die volle Höhe des Viewports ein */
-      display: flex;
-      justify-content: center; /* Inhalte horizontal zentrieren */
-      align-items: flex-start; /* Inhalte oben ausrichten */
-    }
-
-    .main-container {
-      display: flex;
-      flex-direction: column; /* Elemente vertikal anordnen */
-      align-items: center; /* Horizontal zentriert */
-      width: 100%; /* Volle Breite, falls nötig */
-      max-width: 800px; /* Begrenze die Breite in der Mitte */
-      height: auto; /* Container passt sich an die Größe des Inhalts an */
-      padding: 20px;
-      box-sizing: border-box; /* Padding zur Breite hinzufügen */
+      text-align: center;
+      color: #333;
     }
 
     h1 {
@@ -33,10 +19,9 @@
 
     form {
       margin-top: 30px;
-      /* max-width: 600px;
-       margin-left: auto;
-       margin-right: auto;*/
-      width: 100%; /* Passt sich der verfügbaren Breite des Containers an */
+      max-width: 800px; /* Begrenzte Breite für großes Layout */
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .options-container {
@@ -63,17 +48,10 @@
     #quizFrame {
       margin-top: 30px;
       width: 100%; /* Volle Breite */
-      height: auto;
-      /*height: 800px;*/
+      height: 800px; /* Feste Höhe */
       border: 2px solid #0078D7;
       border-radius: 5px;
-      overflow: hidden;
-      display: none; /* Initial ausblenden */
     }
-    /*#quizFrame.visible {
-      display: block;
-      min-height: 400px;
-    }*/
 
     /* Vertikale Darstellung bei kleineren Bildschirmen */
     @media (max-width: 600px) {
@@ -94,95 +72,50 @@
   </style>
 </head>
 <body>
-<div class="main-container">
-  <h1>Wähle ein Quiz</h1>
-  <form id="quizForm">
-    <div class="options-container">
-      <div class="option">
-        <input type="radio" id="quiz1" name="quiz" value="KoreanQuiz.html" required>
-        <label for="quiz1">dezimal → koreanisch</label>
-      </div>
-      <div class="option">
-        <input type="radio" id="quiz3" name="quiz" value="SinokoreanQuiz.html">
-        <label for="quiz3">dezimal → sinokoreanisch</label>
-      </div>
-      <div class="option">
-        <input type="radio" id="quiz2" name="quiz" value="KoreanQuiz2.html">
-        <label for="quiz2">koreanisch → dezimal</label>
-      </div>
-      <div class="option">
-        <input type="radio" id="quiz4" name="quiz" value="SinokoreanQuiz2.html">
-        <label for="quiz4">sinokoreanisch → dezimal</label>
-      </div>
+<h1>Wähle ein Quiz</h1>
+<form id="quizForm">
+  <div class="options-container">
+    <div class="option">
+      <input type="radio" id="quiz1" name="quiz" value="KoreanQuiz.html" required>
+      <label for="quiz1">dezimal → koreanisch</label>
     </div>
-  </form>
+    <div class="option">
+      <input type="radio" id="quiz3" name="quiz" value="SinokoreanQuiz.html">
+      <label for="quiz3">dezimal → sinokoreanisch</label>
+    </div>
+    <div class="option">
+      <input type="radio" id="quiz2" name="quiz" value="KoreanQuiz2.html">
+      <label for="quiz2">koreanisch → dezimal</label>
+    </div>
+    <div class="option">
+      <input type="radio" id="quiz4" name="quiz" value="SinokoreanQuiz2.html">
+      <label for="quiz4">sinokoreanisch → dezimal</label>
+    </div>
+  </div>
+</form>
 
-  <!-- Der Bereich, in dem das Quiz geladen wird -->
-  <iframe
-          id="quizFrame"
-          src=""
-          title="Quiz"
-          allowfullscreen>
-  </iframe>
-  <!--    style="width: 100%; border: 2px solid #0078D7; border-radius: 5px;  overflow: hidden;"-->
-  <script>
-    const quizFrame = document.getElementById("quizFrame");
-    quizFrame.classList.add('visible');
-    // Event-Listener für die Quiz-Auswahl
-    document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
-      radio.addEventListener("change", function () {
-        const selectedQuiz = this.value;
-        const quizFrame = document.getElementById("quizFrame");
+<!-- Der Bereich, in dem das Quiz geladen wird -->
+<iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
-        quizFrame.src = selectedQuiz; // Lade neue Quiz-Seite
-        quizFrame.style.display = "block"; // Zeige das iframe an
-
-        quizFrame.onload = function () {
-          // Passe die Höhe an, nachdem der neue Inhalt geladen wurde
-          adjustIframeHeight();
-
-          // Überprüfe für 2-3 Sekunden dynamische Inhalte, die später geladen werden
-          const interval = setInterval(adjustIframeHeight, 500); // Alle 500ms prüfen
-          setTimeout(() => clearInterval(interval), 3000); // Stoppe nach 3 Sekunden
-        };
-      });
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Setzt sicher, dass keine Radio-Option vorausgewählt ist
+    document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
+      radio.checked = false;
     });
-    // Funktion zum Anpassen der iframe-Höhe
-    function adjustIframeHeight() {
-      const quizFrame = document.getElementById("quizFrame");
+  });
+  // Event Listener für Radio-Buttons
+  document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      // Sobald eine Auswahl getroffen wird, lade das Quiz
+      const selectedQuiz = this.value;
 
-      try {
-        // Vor der erneuten Höhenberechnung zurücksetzen
-        quizFrame.style.height = "0px";
-
-        // Hole die aktuelle Höhe
-        const newHeight = quizFrame.contentWindow.document.documentElement.scrollHeight;
-
-        // Setze die neue Höhe
-        quizFrame.style.height = `${newHeight}px`;
-      } catch (error) {
-        console.warn("Fehler beim Anpassen der iframe-Höhe:", error);
-      }
-    }
-
-    window.addEventListener("message", function (event) {
-// Überprüfen, ob es sich um die Nachricht für eine Größenänderung handelt
-      if (event.data.type === "resize" && event.data.scrollHeight) {
-        const quizFrame = document.getElementById("quizFrame");
-
-        // Setze die Höhe des Quiz-Frames
-        quizFrame.style.height = `${event.data.scrollHeight}px`;
-      }
+      // Lade das Quiz in das iframe
+      const quizFrame = document.getElementById('quizFrame');
+      quizFrame.src = selectedQuiz;
+      quizFrame.hidden = false; // Blende das iframe ein
     });
-
-    document.addEventListener('DOMContentLoaded', function() {
-// Setzt sicher, dass keine Radio-Option vorausgewählt ist
-      document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
-        radio.checked = false;
-      });
-    });
-
-  </script>
-</div>
+  });
+</script>
 </body>
 </html>
