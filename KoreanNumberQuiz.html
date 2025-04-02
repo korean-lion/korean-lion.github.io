@@ -8,12 +8,24 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f9;
-      text-align: center;
-      color: #333;
+      display: flex;
+      justify-content: center; /* Horizontale Zentrierung */
+      align-items: flex-start; /* Vertikale Zentrierung */
+      height: 100%; /* Volle Höhe des Ansichtsfensters */
+      padding: 20px;
+      margin: 0; /* Entfernt Standard-Margins */
     }
-
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Links ausrichten */
+      width: 100%; /* Voll verfügbare Breite */
+      max-width: 800px; /* Begrenzter Bereich */
+      background-color: #f4f4f9;
+    }
     h1 {
-      margin-top: 30px;
+      margin-top: 10px;
+      margin-bottom: 0;
       font-size: 2rem;
     }
 
@@ -72,50 +84,77 @@
   </style>
 </head>
 <body>
-<h1>Wähle ein Quiz</h1>
-<form id="quizForm">
-  <div class="options-container">
-    <div class="option">
-      <input type="radio" id="quiz1" name="quiz" value="KoreanQuiz.html" required>
-      <label for="quiz1">dezimal → koreanisch</label>
+<div class="container">
+  <h1>Wähle ein Quiz</h1>
+  <form id="quizForm">
+    <div class="options-container">
+      <div class="option">
+        <input type="radio" id="quiz1" name="quiz" value="KoreanQuiz.html" required>
+        <label for="quiz1">dezimal → koreanisch</label>
+      </div>
+      <div class="option">
+        <input type="radio" id="quiz3" name="quiz" value="SinokoreanQuiz.html">
+        <label for="quiz3">dezimal → sinokoreanisch</label>
+      </div>
+      <div class="option">
+        <input type="radio" id="quiz2" name="quiz" value="KoreanQuiz2.html">
+        <label for="quiz2">koreanisch → dezimal</label>
+      </div>
+      <div class="option">
+        <input type="radio" id="quiz4" name="quiz" value="SinokoreanQuiz2.html">
+        <label for="quiz4">sinokoreanisch → dezimal</label>
+      </div>
     </div>
-    <div class="option">
-      <input type="radio" id="quiz3" name="quiz" value="SinokoreanQuiz.html">
-      <label for="quiz3">dezimal → sinokoreanisch</label>
-    </div>
-    <div class="option">
-      <input type="radio" id="quiz2" name="quiz" value="KoreanQuiz2.html">
-      <label for="quiz2">koreanisch → dezimal</label>
-    </div>
-    <div class="option">
-      <input type="radio" id="quiz4" name="quiz" value="SinokoreanQuiz2.html">
-      <label for="quiz4">sinokoreanisch → dezimal</label>
-    </div>
-  </div>
-</form>
+  </form>
 
-<!-- Der Bereich, in dem das Quiz geladen wird -->
-<iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
+  <!-- Der Bereich, in dem das Quiz geladen wird -->
+  <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Setzt sicher, dass keine Radio-Option vorausgewählt ist
+  <script>
+    document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        const selectedQuiz = this.value;
+        const quizFrame = document.getElementById("quizFrame");
+
+        quizFrame.src = selectedQuiz;
+        quizFrame.hidden = false; // Blende das iframe ein
+
+        // Sobald der Inhalt im iframe geladen ist
+        quizFrame.onload = function () {
+          try {
+            // Zugriff auf den iframe Inhalt
+            const iframeBody = quizFrame.contentWindow.document.body;
+            iframeBody.style.margin = "10px"; // Entferne margin
+            iframeBody.style.padding = "0"; // Entferne padding
+
+            // Zusätzlich können andere Styles angepasst werden
+            iframeBody.style.boxSizing = "border-box";
+            iframeBody.style.fontFamily = "inherit"; // Matching Font
+          } catch (error) {
+            console.error("Kann body-Stile nicht ändern. Möglicherweise ein Cross-Origin-Problem.", error);
+          }
+        };
+      });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      // Setzt sicher, dass keine Radio-Option vorausgewählt ist
+      document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
+        radio.checked = false;
+      });
+    });
+    // Event Listener für Radio-Buttons
     document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
-      radio.checked = false;
-    });
-  });
-  // Event Listener für Radio-Buttons
-  document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
-    radio.addEventListener('change', function() {
-      // Sobald eine Auswahl getroffen wird, lade das Quiz
-      const selectedQuiz = this.value;
+      radio.addEventListener('change', function() {
+        // Sobald eine Auswahl getroffen wird, lade das Quiz
+        const selectedQuiz = this.value;
 
-      // Lade das Quiz in das iframe
-      const quizFrame = document.getElementById('quizFrame');
-      quizFrame.src = selectedQuiz;
-      quizFrame.hidden = false; // Blende das iframe ein
+        // Lade das Quiz in das iframe
+        const quizFrame = document.getElementById('quizFrame');
+        quizFrame.src = selectedQuiz;
+        quizFrame.hidden = false; // Blende das iframe ein
+      });
     });
-  });
-</script>
+  </script>
+</div>
 </body>
 </html>
