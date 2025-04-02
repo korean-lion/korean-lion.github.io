@@ -13,6 +13,7 @@
             justify-content: center; /* Zentriert den Container horizontal */
             align-items: flex-start; /* Top-Ausrichtung vertikal */
             height: 100%; /* Für Flexbox-Anpassung */
+            overflow: hidden;
         }
         .container {
             display: flex;
@@ -146,6 +147,37 @@
 
 <script>
     let currentNumber; // Die aktuelle Zufallszahl
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let lastSentHeight = 0; // Speichert die zuletzt gesendete Höhe
+
+        function sendHeightToParent() {
+            const height = document.body.scrollHeight; // Die gesamte Höhe des Inhalts
+            window.parent.postMessage({ type: "resize", scrollHeight: height }, "*");
+        }
+
+// Sende die Höhe beim Laden und bei Änderungen
+        window.addEventListener("load", sendHeightToParent);
+        window.addEventListener("resize", sendHeightToParent); // Falls die Größe dynamisch angepasst wird
+
+        // Initial Höhe senden
+        sendHeightToParent();
+
+        // **MutationObserver für DOM-Änderungen**
+        const observer = new MutationObserver(() => {
+            sendHeightToParent(); // Trigger bei jeder DOM-Veränderung
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true }); // Beobachte DOM-Änderungen
+
+        // **Überprüfung bei Benutzerinteraktionen (Klicks) erzwingen**
+        document.body.addEventListener("click", () => {
+            sendHeightToParent(); // Höhe nach Klick erneut überprüfen
+        });
+
+        // Resize-Event (falls Browserfenstergröße Änderungen bewirkt)
+        window.addEventListener("resize", sendHeightToParent);
+    });
 
     // Event Listener für die Enter-Taste im Eingabefeld
     document.getElementById("answer").addEventListener("keydown", function(event) {
