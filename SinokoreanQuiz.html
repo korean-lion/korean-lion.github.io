@@ -247,6 +247,13 @@ function formatKoreanNumberWithSpaces(number) {
         document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
     }
 
+    function speakKorean(answer) {
+        const utterance = new SpeechSynthesisUtterance(answer);
+        utterance.lang = 'ko-KR'; // Setzt die Sprache auf Koreanisch
+        utterance.rate = 0.5; // Setzt die Sprechgeschwindigkeit (1.0 ist normal, 0.5 ist langsamer)
+        speechSynthesis.speak(utterance);
+    }
+
     function checkAnswer() {
         const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
         const correctAnswer = generateSinokoreanNumber(currentNumber); // Korrekte Antwort generieren
@@ -272,6 +279,7 @@ function formatKoreanNumberWithSpaces(number) {
               </table>
             `;
             //resultDiv.innerHTML = `Die richtige Antwort für ${formatNumberWithThousandSeparator(previousNumber)} ist: ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
+            speakKorean(correctAnswer);
             return; // Beende die Funktion hier
         }
         // Alternative Antworten für 100, 1000, 10000 und andere Einheiten
@@ -303,6 +311,7 @@ function formatKoreanNumberWithSpaces(number) {
                     feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
                     feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
                 }
+            }
                 resultDiv.innerHTML = `
               <p>Leider falsch.</p>
               <table>
@@ -321,7 +330,7 @@ function formatKoreanNumberWithSpaces(number) {
               </table>
             `;
               // resultDiv.innerHTML = `${formatKoreanNumberWithSpaces(feedbackUser)} ist leider falsch. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(feedbackCorrect)}`;
-            }
+            speakKorean(correctAnswer);
         } else {
             resultDiv.innerHTML = `
               <p>Richtig! Gut gemacht.</p>
@@ -338,6 +347,7 @@ function formatKoreanNumberWithSpaces(number) {
               </table>
             `;
             //resultDiv.innerHTML = `Richtig! Gut gemacht. Die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(previousNumber)} lautet ${formatKoreanNumberWithSpaces(correctAnswer)}.`;
+            speakKorean(correctAnswer);
         }
     }
 

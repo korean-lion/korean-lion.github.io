@@ -191,6 +191,12 @@
     document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen(
   }
 
+  function speakGerman(answer) {
+    const utterance = new SpeechSynthesisUtterance(answer);
+    utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
+    speechSynthesis.speak(utterance);
+  }
+
   function checkAnswer() {
     const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
     const correctAnswer = currentNumber; // Korrekte Antwort generieren
@@ -217,7 +223,8 @@
               </table>
             `;
        //resultDiv.innerHTML = `Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
-       return; // Beende die Funktion hier
+      speakGerman(correctAnswer);
+      return; // Beende die Funktion hier
     }
 
     // Generiere sofort eine neue Frage
@@ -247,6 +254,7 @@
               </table>
             `;
       //resultDiv.innerHTML = `Richtig! Gut gemacht. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
+      speakGerman(correctAnswer);
     } else {
       // Falsche Antwort: Zeichen-für-Zeichen-Vergleich
       let feedbackUser = "";
@@ -282,6 +290,7 @@
               </table>
             `;
       //resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
+      speakGerman(correctAnswer);
     }
   }
 

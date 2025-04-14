@@ -302,6 +302,12 @@
         return answer.replace(/(열|물|른|흔|쉰|순|든)(?=\S|$)/g, '$1 ').trim(); // Füge ein Leerzeichen hinter den Einheiten hinzu, auch wenn sie am Ende stehen
     }
 
+    function speakKorean(answer) {
+        const utterance = new SpeechSynthesisUtterance(answer);
+        utterance.lang = 'ko-KR'; // Setzt die Sprache auf Koreanisch
+        speechSynthesis.speak(utterance);
+    }
+    
     function checkAnswer() {
         const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
         const correctAnswer = numbers[currentNumber].replaceAll(' ', ''); // Alle Leerzeichen entfernen
@@ -327,6 +333,7 @@
               </table>
             `;
            // resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${answer}.`;
+            speakKorean(answer);
             generateQuiz(); // Nächste Frage generieren
             return; // Beende die Funktion hier
         }
@@ -351,6 +358,7 @@
                     feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
                     feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
                 }
+            }
                 resultDiv.innerHTML = `
               <p>Leider falsch.</p>
               <table>
@@ -369,7 +377,7 @@
               </table>
             `;
                // resultDiv.innerHTML = `${formatKoreanAnswer(feedbackUser)} ist leider falsch. Die koreanische Zahl für ${previousNumber} lautet ${formatKoreanAnswer(feedbackCorrect)}`;
-            }
+                speakKorean(correctAnswer);
         } else {
             resultDiv.innerHTML = `
               <p>Richtig! Gut gemacht.</p>
@@ -385,7 +393,8 @@
               </table>
             `;
             //resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${answer}.`;
-        }
+                speakKorean(answer);
+            }
 
         currentInput = ''; // Eingabe zurücksetzen
         generateQuiz(); // Nächste Frage generieren

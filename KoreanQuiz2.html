@@ -235,6 +235,12 @@
     document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
   }
 
+  function speakGerman(answer) {
+    const utterance = new SpeechSynthesisUtterance(answer);
+    utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
+    speechSynthesis.speak(utterance);
+  }
+
   function checkAnswer() {
     const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
     const correctAnswer = currentNumber;//Dezimalzahl
@@ -258,6 +264,7 @@
               </table>
             `;
       //resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${previousNumber}.`;
+      speakGerman(currentNumber);
       generateQuiz(); // Nächste Frage generieren
       return; // Beende die Funktion hier
     }
@@ -279,7 +286,7 @@
           feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
           feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
         }
-
+      }
         resultDiv.innerHTML = `
               <p>Leider falsch.</p>
               <table>
@@ -298,7 +305,7 @@
               </table>
             `;
         //resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${previousNumber} lautet ${feedbackCorrect}`;
-      }
+      speakGerman(correctAnswer);
     } else {
       resultDiv.innerHTML = `
               <p>Richtig! Gut gemacht.</p>
@@ -314,6 +321,7 @@
               </table>
             `;
       //resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${correctAnswer}.`;
+      speakGerman(correctAnswer);
     }
 
     currentInput = ''; // Eingabe zurücksetzen
