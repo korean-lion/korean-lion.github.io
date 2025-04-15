@@ -46,6 +46,14 @@
       font-weight: bold;
       font-size: 20px;
     }
+    .button-container {
+       display: flex;
+       flex-direction: row; /* Inhalte untereinander */
+       align-items: flex-start; /* Links ausrichten */
+       margin-bottom: 20px;
+       margin-top: 20px;
+       gap: 10px;
+     }
     button {
       padding: 10px 15px;
       font-size: 16px;
@@ -87,8 +95,12 @@
   <div class="question" id="question"></div>
   <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." />
 </div>
-<button id="nextButton" onclick="checkAnswer()">Antwort überprüfen</button>
-<div class="result" id="result"></div>
+  <div class="button-container">
+    <button id="nextButton" onclick="checkAnswer()">Check</button>
+    <button id="replayButton" onclick="speakKorean(currentSinoNumber)">&#9654;</button>
+    <button id="stoppButton" onclick="speechSynthesis.cancel()">&#11035;</button>
+  </div>
+  <div class="result" id="result"></div>
 <script>
   let currentNumber; // Die aktuelle Zufallszahl
 
@@ -96,7 +108,7 @@
 
     function sendHeightToParent() {
       const height = document.body.scrollHeight; // Die gesamte Höhe des Inhalts
-      window.parent.postMessage({ type: "resize", scrollHeight: height }, "*");
+      window.parent.postMessage({type: "resize", scrollHeight: height}, "*");
     }
 
 // Sende die Höhe beim Laden und bei Änderungen
@@ -111,7 +123,7 @@
       sendHeightToParent(); // Trigger bei jeder DOM-Veränderung
     });
 
-    observer.observe(document.body, { childList: true, subtree: true, attributes: true }); // Beobachte DOM-Änderungen
+    observer.observe(document.body, {childList: true, subtree: true, attributes: true}); // Beobachte DOM-Änderungen
 
     // **Überprüfung bei Benutzerinteraktionen (Klicks) erzwingen**
     document.body.addEventListener("click", () => {
@@ -123,7 +135,7 @@
   });
 
   // Event Listener für die Enter-Taste im Eingabefeld
-  document.getElementById("answer").addEventListener("keydown", function(event) {
+  document.getElementById("answer").addEventListener("keydown", function (event) {
     if (event.key === "Enter") { // Prüft, ob die Return/Enter-Taste gedrückt wurde
       event.preventDefault(); // Verhindert das Standardverhalten (z. B. Formular abschicken)
       checkAnswer(); // Führt die Überprüfung durch
@@ -186,14 +198,27 @@
     const maxRange = parseInt(rangeSelect.value); // Maximalen Bereich aus der Auswahl abrufen
     currentNumber = Math.floor(Math.random() * (maxRange + 1)); // Zufallszahl zwischen 0 und maxRange
     currentSinoNumber = generateSinokoreanNumber(currentNumber);
+    speakKorean(currentSinoNumber);
     document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${formatKoreanNumberWithSpaces(currentSinoNumber)}?`;
     document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
     document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen(
   }
 
-  function speakGerman(answer) {
+  /*function speakGerman(answer) {
     const utterance = new SpeechSynthesisUtterance(answer);
     utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
+    speechSynthesis.speak(utterance);
+  }*/
+
+  function speakKorean(answer) {
+    //const replayButton = document.getElementById('replayButton');
+    if (speechSynthesis.speaking) {
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(answer);
+    utterance.lang = 'ko-KR'; // Setzt die Sprache auf Koreanisch
+    utterance.rate = 0.5; // Setzt die Sprechgeschwindigkeit (1.0 ist normal, 0.5 ist langsamer)
     speechSynthesis.speak(utterance);
   }
 
@@ -222,8 +247,8 @@
                 </tr>
               </table>
             `;
-       //resultDiv.innerHTML = `Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
-      speakGerman(correctAnswer);
+      //resultDiv.innerHTML = `Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
+      //speakGerman(correctAnswer);
       return; // Beende die Funktion hier
     }
 
@@ -254,7 +279,7 @@
               </table>
             `;
       //resultDiv.innerHTML = `Richtig! Gut gemacht. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
-      speakGerman(correctAnswer);
+      //speakGerman(correctAnswer);
     } else {
       // Falsche Antwort: Zeichen-für-Zeichen-Vergleich
       let feedbackUser = "";
@@ -290,7 +315,7 @@
               </table>
             `;
       //resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
-      speakGerman(correctAnswer);
+      // speakGerman(correctAnswer);
     }
   }
 

@@ -52,6 +52,14 @@
             cursor: pointer;
             margin-top: 10px;
         }
+        .button-container {
+            display: flex;
+            flex-direction: row; /* Inhalte untereinander */
+            align-items: flex-start; /* Links ausrichten */
+            margin-bottom: 20px;
+            margin-top: 20px;
+            gap: 10px;
+        }
         .keyboard {
             margin-top: 20px;
             display: flex;
@@ -100,7 +108,11 @@
     <div class="question" id="question"></div>
     <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." readonly />
 </div>
-<button id="nextButton" onclick="checkAnswer()">Antwort überprüfen</button>
+    <div class="button-container">
+        <button id="nextButton" onclick="checkAnswer()">Check</button>
+        <button id="replayButton" onclick="speakGerman(currentNumber)">&#9654;</button>
+        <button id="stoppButton" onclick="speechSynthesis.cancel()">&#11035;</button>
+    </div>
 <div class="result" id="result"></div>
 
 <div class="keyboard">
@@ -253,7 +265,7 @@
     let currentInput = '';
 
     document.addEventListener("DOMContentLoaded", function () {
-        let lastSentHeight = 0; // Speichert die zuletzt gesendete Höhe
+       // let lastSentHeight = 0; // Speichert die zuletzt gesendete Höhe
 
         function sendHeightToParent() {
             const height = document.body.scrollHeight; // Die gesamte Höhe des Inhalts
@@ -294,6 +306,7 @@
     function generateQuiz() {
         currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generieren
         document.getElementById("question").innerText = `Was ist die koreanische Zahl für ${currentNumber}?`;
+        speakGerman(currentNumber);
        // document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
         document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
     }
@@ -302,12 +315,22 @@
         return answer.replace(/(열|물|른|흔|쉰|순|든)(?=\S|$)/g, '$1 ').trim(); // Füge ein Leerzeichen hinter den Einheiten hinzu, auch wenn sie am Ende stehen
     }
 
-    function speakKorean(answer) {
+   /* function speakKorean(answer) {
         const utterance = new SpeechSynthesisUtterance(answer);
         utterance.lang = 'ko-KR'; // Setzt die Sprache auf Koreanisch
         speechSynthesis.speak(utterance);
+    }*/
+
+    function speakGerman(answer) {
+        //const replayButton = document.getElementById('replayButton');
+        if (speechSynthesis.speaking) {
+            return;
+        }
+        const utterance = new SpeechSynthesisUtterance(answer);
+        utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
+        speechSynthesis.speak(utterance);
     }
-    
+
     function checkAnswer() {
         const userAnswer = document.getElementById("answer").value.replaceAll(' ', '').trim(); // Benutzerantwort aus dem Eingabefeld
         const correctAnswer = numbers[currentNumber].replaceAll(' ', ''); // Alle Leerzeichen entfernen
@@ -333,7 +356,7 @@
               </table>
             `;
            // resultDiv.innerHTML = `Die richtige Antwort für ${currentNumber} ist: ${answer}.`;
-            speakKorean(answer);
+            //speakKorean(answer);
             generateQuiz(); // Nächste Frage generieren
             return; // Beende die Funktion hier
         }
@@ -377,7 +400,7 @@
               </table>
             `;
                // resultDiv.innerHTML = `${formatKoreanAnswer(feedbackUser)} ist leider falsch. Die koreanische Zahl für ${previousNumber} lautet ${formatKoreanAnswer(feedbackCorrect)}`;
-                speakKorean(correctAnswer);
+               // speakKorean(correctAnswer);
         } else {
             resultDiv.innerHTML = `
               <p>Richtig! Gut gemacht.</p>
@@ -393,7 +416,7 @@
               </table>
             `;
             //resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${answer}.`;
-                speakKorean(answer);
+                //speakKorean(answer);
             }
 
         currentInput = ''; // Eingabe zurücksetzen
