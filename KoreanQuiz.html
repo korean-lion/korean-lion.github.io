@@ -110,7 +110,7 @@
 </div>
     <div class="button-container">
         <button id="nextButton" onclick="checkAnswer()">Check</button>
-        <button id="replayButton" onclick="speakGerman(currentNumber)">&#9654;</button>
+        <button id="replayButton" onclick="handleReplayClick()">&#9654;</button>
         <button id="stoppButton" onclick="speechSynthesis.cancel()">&#11035;</button>
     </div>
 <div class="result" id="result"></div>
@@ -303,6 +303,20 @@
         }
     });
 
+    // Funktion, die beim Klick über onclick ausgelöst wird
+    function handleReplayClick() {
+        const replayButton = document.getElementById("replayButton");
+        replayButton.disabled = true; // Button deaktivieren
+
+        // Nach 1 Sekunde den Button wieder aktivieren
+        setTimeout(() => {
+            replayButton.disabled = false;
+        }, 1000);
+
+        // Die ursprüngliche Funktionalität ausführen
+        speakGerman(currentNumber); // Ruft die Sprache aus der bestehenden Logik auf
+    }
+
     function generateQuiz() {
         currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generieren
         document.getElementById("question").innerText = `Was ist die koreanische Zahl für ${currentNumber}?`;
@@ -322,10 +336,6 @@
     }*/
 
     function speakGerman(answer) {
-        //const replayButton = document.getElementById('replayButton');
-        if (speechSynthesis.speaking) {
-            return;
-        }
         const utterance = new SpeechSynthesisUtterance(answer);
         utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
         speechSynthesis.speak(utterance);

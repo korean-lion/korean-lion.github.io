@@ -123,7 +123,7 @@
 </div>
     <div class="button-container">
         <button id="nextButton" onclick="checkAnswer()">Check</button>
-        <button id="replayButton" onclick="speakGerman(currentNumber)">&#9654;</button>
+        <button id="replayButton" onclick="handleReplayClick()">&#9654;</button>
         <button id="stoppButton" onclick="speechSynthesis.cancel()">&#11035;</button>
     </div>
 <div class="result" id="result"></div>
@@ -246,16 +246,36 @@ function generateSinokoreanNumber(number) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Tausenderpunkt hinzufügen
     }
 
-function formatKoreanNumberWithSpaces(number) {
-    return number.replace(/(백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
-}
+    function formatKoreanNumberWithSpaces(number) {
+        return number.replace(/(백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
+    }
+
+    // Funktion, die beim Klick über onclick ausgelöst wird
+    function handleReplayClick() {
+        const replayButton = document.getElementById("replayButton");
+        replayButton.disabled = true; // Button deaktivieren
+
+        // Nach 1 Sekunde den Button wieder aktivieren
+        setTimeout(() => {
+            replayButton.disabled = false;
+        }, 1000);
+
+        // Die ursprüngliche Funktionalität ausführen
+        speakGerman(currentNumber); // Ruft die Sprache aus der bestehenden Logik auf
+    }
 
     function generateQuiz() {
         const rangeSelect = document.getElementById("rangeSelect");
         const maxRange = parseInt(rangeSelect.value); // Maximalen Bereich aus der Auswahl abrufen
         currentNumber = Math.floor(Math.random() * (maxRange + 1)); // Zufallszahl zwischen 0 und maxRange
         document.getElementById("question").innerText = `Was ist die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(currentNumber)}?`;
-        speakGerman(currentNumber);
+        // Bereich 1000-1999 überprüfen, da sonst Aussprache x-hundert
+        if (currentNumber < 1000 || currentNumber > 1999) {
+            speakGerman(currentNumber);
+        }else {
+            speakGerman(numberToWords(currentNumber));
+        }
+
         document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
         document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen
     }
@@ -267,11 +287,45 @@ function formatKoreanNumberWithSpaces(number) {
         speechSynthesis.speak(utterance);
     }*/
 
-    function speakGerman(answer) {
-       // const replayButton = document.getElementById('replayButton');
-        if (speechSynthesis.speaking) {
-            return;
+    function numberToWords(num) {
+        const ones = [
+            '', 'eins', 'zwei', 'drei', 'vier', 'fünf',
+            'sechs', 'sieben', 'acht', 'neun', 'zehn',
+            'elf', 'zwölf', 'dreizehn', 'vierzehn', 'fünfzehn',
+            'sechzehn', 'siebzehn', 'achtzehn', 'neunzehn'
+        ];
+        const tens = [
+            '', '', 'zwanzig', 'dreißig', 'vierzig', 'fünfzig',
+            'sechzig', 'siebzig', 'achtzig', 'neunzig'
+        ];
+        const hundreds = [
+            '', 'einhundert', 'zweihundert', 'dreihundert',
+            'vierhundert', 'fünfhundert', 'sechshundert',
+            'siebenhundert', 'achthundert', 'neunhundert'
+        ];
+
+        // Tausender-Teil (Immer genau "eintausend")
+        let word = 'eintausend';
+
+        // Nun die Hunderter/Zehner/Einer-Teile übersetzen
+        num %= 1000; // Rest der Zahl nach den Tausendern
+
+        if (num >= 100) {
+            word += hundreds[Math.floor(num / 100)];
+            num %= 100;
         }
+        if (num >= 20) {
+            word += tens[Math.floor(num / 10)];
+            num %= 10;
+        }
+        if (num > 0) {
+            word += ones[num];
+        }
+
+        return word.trim();
+    }
+
+    function speakGerman(answer) {
         const utterance = new SpeechSynthesisUtterance(answer);
         utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
         speechSynthesis.speak(utterance);

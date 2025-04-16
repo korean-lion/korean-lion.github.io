@@ -97,7 +97,7 @@
 </div>
   <div class="button-container">
     <button id="nextButton" onclick="checkAnswer()">Check</button>
-    <button id="replayButton" onclick="speakKorean(currentSinoNumber)">&#9654;</button>
+    <button id="replayButton" onclick="handleReplayClick()">&#9654;</button>
     <button id="stoppButton" onclick="speechSynthesis.cancel()">&#11035;</button>
   </div>
   <div class="result" id="result"></div>
@@ -193,6 +193,20 @@
     return number.replace(/(백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
   }
 
+  // Funktion, die beim Klick über onclick ausgelöst wird
+  function handleReplayClick() {
+    const replayButton = document.getElementById("replayButton");
+    replayButton.disabled = true; // Button deaktivieren
+
+    // Nach 1 Sekunde den Button wieder aktivieren
+    setTimeout(() => {
+      replayButton.disabled = false;
+    }, 1000);
+
+    // Die ursprüngliche Funktionalität ausführen
+    speakKorean(currentSinoNumber); // Ruft die Sprache aus der bestehenden Logik auf
+  }
+
   function generateQuiz() {
     const rangeSelect = document.getElementById("rangeSelect");
     const maxRange = parseInt(rangeSelect.value); // Maximalen Bereich aus der Auswahl abrufen
@@ -211,11 +225,6 @@
   }*/
 
   function speakKorean(answer) {
-    //const replayButton = document.getElementById('replayButton');
-    if (speechSynthesis.speaking) {
-      return;
-    }
-
     const utterance = new SpeechSynthesisUtterance(answer);
     utterance.lang = 'ko-KR'; // Setzt die Sprache auf Koreanisch
     utterance.rate = 0.5; // Setzt die Sprechgeschwindigkeit (1.0 ist normal, 0.5 ist langsamer)
