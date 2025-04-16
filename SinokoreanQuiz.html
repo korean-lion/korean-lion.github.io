@@ -118,7 +118,7 @@
     <option value="1000000000000">0 bis 1 Billion</option>
 </select>
 <div class="question-container">
-    <div class="question" id="question"></div>
+    <label class="question" id="question" for="answer"></label>
     <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." readonly />
 </div>
     <div class="button-container">
@@ -172,7 +172,7 @@
         window.addEventListener("load", sendHeightToParent);
         window.addEventListener("resize", sendHeightToParent); // Falls die Größe dynamisch angepasst wird
 
-        // Initial Höhe senden
+        // Initiale Höhe senden
         sendHeightToParent();
 
         // **MutationObserver für DOM-Änderungen**
@@ -247,7 +247,8 @@ function generateSinokoreanNumber(number) {
     }
 
     function formatKoreanNumberWithSpaces(number) {
-        return number.replace(/(백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
+        return number.replace(/([백천만억조])(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
+        //return number.replace(/(백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
     }
 
     // Funktion, die beim Klick über onclick ausgelöst wird

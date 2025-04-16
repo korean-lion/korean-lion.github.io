@@ -105,7 +105,7 @@
 <div class="container">
 <h1>Koreanisches Zahlenquiz</h1>
 <div class="question-container">
-    <div class="question" id="question"></div>
+    <label class="question" id="question" for="answer"></label>
     <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." readonly />
 </div>
     <div class="button-container">
@@ -276,7 +276,7 @@
         window.addEventListener("load", sendHeightToParent);
         window.addEventListener("resize", sendHeightToParent); // Falls die Größe dynamisch angepasst wird
 
-        // Initial Höhe senden
+        // Initiale Höhe senden
         sendHeightToParent();
 
         // **MutationObserver für DOM-Änderungen**
@@ -326,7 +326,8 @@
     }
 
     function formatKoreanAnswer(answer) {
-        return answer.replace(/(열|물|른|흔|쉰|순|든)(?=\S|$)/g, '$1 ').trim(); // Füge ein Leerzeichen hinter den Einheiten hinzu, auch wenn sie am Ende stehen
+        return answer.replace(/(s[열물른흔쉰순든])(?=\S|$)/g, '$1 ').trim(); // Füge ein Leerzeichen hinter den Einheiten hinzu, auch wenn sie am Ende stehen
+       // return answer.replace(/(열|물|른|흔|쉰|순|든)(?=\S|$)/g, '$1 ').trim(); // Füge ein Leerzeichen hinter den Einheiten hinzu, auch wenn sie am Ende stehen
     }
 
    /* function speakKorean(answer) {

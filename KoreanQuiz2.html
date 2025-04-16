@@ -83,7 +83,7 @@
 <div class="container">
 <h1>Koreanisches Zahlenquiz</h1>
 <div class="question-container">
-  <div class="question" id="question"></div>
+  <label class="question" id="question" for="answer"></label>
   <input type="text" id="answer" placeholder="Gib deine Antwort hier ein..." />
 </div>
   <div class="button-container">
@@ -213,7 +213,7 @@
     window.addEventListener("load", sendHeightToParent);
     window.addEventListener("resize", sendHeightToParent); // Falls die Größe dynamisch angepasst wird
 
-    // Initial Höhe senden
+    // Initiale Höhe senden
     sendHeightToParent();
 
     // **MutationObserver für DOM-Änderungen**
@@ -280,7 +280,7 @@
     const resultDiv = document.getElementById("result");
     const correctNumberStr = String(correctAnswer); // Richtige Zahl als String
     const userInputStr = String(userAnswer); // Benutzer-Eingabe als String
-    previousNumber = numbers[currentNumber];
+    let previousNumber = numbers[currentNumber];
 
     // Wenn keine Benutzereingabe gemacht wurde
     if (userAnswer === "") {
@@ -303,6 +303,7 @@
     }
 
     // Vergleiche die Benutzereingabe mit der richtigen Antwort
+    // noinspection EqualityComparisonWithCoercionJS
     if (userAnswer != correctAnswer) {
       // Falsche Antwort: Zeichen-für-Zeichen-Vergleich
       let feedbackUser = "";
