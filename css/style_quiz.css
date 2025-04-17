@@ -31,8 +31,8 @@ h1{
     gap: 10px;
 }
 .question {
-    margin-right: 10px; /* Abstand zwischen Frage und Eingabefeld */
-    font-size: 20px;
+    /*margin-right: 10px; /* Abstand zwischen Frage und Eingabefeld */
+    font-size: 18px;
 }
 .result {
     margin-top: 20px;
@@ -49,8 +49,8 @@ button {
     display: flex;
     flex-direction: row; /* Inhalte untereinander */
     align-items: flex-start; /* Links ausrichten */
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin-bottom: 0;
+    margin-top: 0;
     gap: 10px;
 }
 #answer {
