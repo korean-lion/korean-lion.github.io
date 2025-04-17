@@ -112,9 +112,10 @@
   <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
   <script>
-    // 1. Stoppe Prozesse bei reload/navigieren
+    // Stoppe Prozesse bei reload/navigieren
     window.addEventListener("beforeunload", function () {
       const quizFrame = document.getElementById("quizFrame");
+      quizFrame.src = `${selectedQuiz}?noCache=${Date.now()}`;
 
       // 1a: Beende speechSynthesis-Prozesse
       if (speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)) {
