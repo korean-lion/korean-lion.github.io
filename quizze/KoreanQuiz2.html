@@ -268,6 +268,11 @@
     speechSynthesis.speak(utterance);
   }*/
 
+  function playSound(src) {
+    const audio = new Audio(src);
+    audio.play().catch(error => console.error("Audio konnte nicht abgespielt werden:", error));
+  }
+
   function speakKorean(answer) {
     const utterance = new SpeechSynthesisUtterance(answer);
     utterance.lang = 'ko-KR'; // Setzt die Sprache auf Koreanisch
@@ -310,6 +315,8 @@
       let feedbackCorrect = "";
       const maxLength = Math.max(correctNumberStr.length, userInputStr.length);
 
+      playSound("../sounds/error.mp3"); // Ton für falsche Lösung
+
       for (let i = 0; i < maxLength; i++) {
         if (userInputStr[i] === correctNumberStr[i]) {
           // Richtig eingegebene Stelle in Grün
@@ -322,7 +329,7 @@
         }
       }
         resultDiv.innerHTML = `
-              <p>Leider falsch.</p>
+              <p>Leider falsch. <button id="weiterButton" style="margin-left: 10px; font-size: 14px;margin-top:0;">Weiter</button></p>
               <table>
                 <tr>
                   <td style="font-size: 16px;">Koreanische Zahl:</td>
@@ -338,6 +345,15 @@
                 </tr>
               </table>
             `;
+      // Event-Listener für den Button danach hinzufügen
+      const weiterButton = document.getElementById("weiterButton");
+      weiterButton.addEventListener("click", function () {
+        // Fehlermeldung zurücksetzen
+        // resultDiv.innerHTML = ""; // Text entfernen
+        weiterButton.remove();
+        currentInput = ''; // Eingabe zurücksetzen
+        generateQuiz(); // Nächste Frage generieren
+      });
         //resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${previousNumber} lautet ${feedbackCorrect}`;
       //speakGerman(correctAnswer);
     } else {
@@ -354,12 +370,13 @@
                 </tr>
               </table>
             `;
+      currentInput = ''; // Eingabe zurücksetzen
+      generateQuiz(); // Nächste Frage generieren
       //resultDiv.innerHTML = `Richtig! Gut gemacht. Die koreanische Zahl für ${previousNumber} lautet ${correctAnswer}.`;
       //speakGerman(correctAnswer);
     }
 
-    currentInput = ''; // Eingabe zurücksetzen
-    generateQuiz(); // Nächste Frage generieren
+
   }
 
   // Quiz und Tastatur generieren

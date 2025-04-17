@@ -216,7 +216,7 @@
     currentSinoNumber = generateSinokoreanNumber(currentNumber);
     speakKorean(currentSinoNumber);
     document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${formatKoreanNumberWithSpaces(currentSinoNumber)}?`;
-    document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
+    //document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
     document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen(
   }
 
@@ -225,6 +225,11 @@
     utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
     speechSynthesis.speak(utterance);
   }*/
+
+  function playSound(src) {
+    const audio = new Audio(src);
+    audio.play().catch(error => console.error("Audio konnte nicht abgespielt werden:", error));
+  }
 
   function speakKorean(answer) {
     const utterance = new SpeechSynthesisUtterance(answer);
@@ -243,8 +248,6 @@
     //resultDiv.innerText = `Die richtige Antwort für ${formatKoreanNumberWithSpaces(previousSinoNumberNumber)} ist: ${formatNumberWithThousandSeparator(correctNumberStr)}.`;
 // Wenn keine Benutzereingabe gemacht wurde
     if (userAnswer === "") {
-// Generiere sofort eine neue Frage
-      generateQuiz();
       resultDiv.innerHTML = `
               <table>
                 <tr>
@@ -260,11 +263,9 @@
             `;
       //resultDiv.innerHTML = `Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
       //speakGerman(correctAnswer);
+      generateQuiz();
       return; // Beende die Funktion hier
     }
-
-    // Generiere sofort eine neue Frage
-    generateQuiz();
 
     const userNumber = parseInt(userAnswer, 10);
 
@@ -289,6 +290,8 @@
                 </tr>
               </table>
             `;
+      currentInput = ''; // Eingabe zurücksetzen
+      generateQuiz(); // Nächste Frage generieren
       //resultDiv.innerHTML = `Richtig! Gut gemacht. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
       //speakGerman(correctAnswer);
     } else {
@@ -296,6 +299,8 @@
       let feedbackUser = "";
       let feedbackCorrect = "";
       const maxLength = Math.max(correctNumberStr.length, userInputStr.length);
+
+      playSound("../sounds/error.mp3"); // Ton für falsche Lösung
 
       for (let i = 0; i < maxLength; i++) {
         if (userInputStr[i] === correctNumberStr[i]) {
@@ -309,7 +314,7 @@
         }
       }
       resultDiv.innerHTML = `
-              <p>Leider falsch.</p>
+              <p>Leider falsch. <button id="weiterButton" style="margin-left: 10px; font-size: 14px;margin-top:0;">Weiter</button></p>
               <table>
                 <tr>
                   <td style="font-size: 16px;">Sinokoreanische Zahl:</td>
@@ -325,6 +330,15 @@
                 </tr>
               </table>
             `;
+      // Event-Listener für den Button danach hinzufügen
+      const weiterButton = document.getElementById("weiterButton");
+      weiterButton.addEventListener("click", function () {
+        // Fehlermeldung zurücksetzen
+        // resultDiv.innerHTML = ""; // Text entfernen
+        weiterButton.remove();
+        currentInput = ''; // Eingabe zurücksetzen
+        generateQuiz(); // Nächste Frage generieren
+      });
       //resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
       // speakGerman(correctAnswer);
     }
