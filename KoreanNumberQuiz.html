@@ -112,7 +112,7 @@
   <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
   <script>
-    // Stoppe Prozesse bei reload/navigieren
+    // 1. Stoppe Prozesse bei reload/navigieren
     window.addEventListener("beforeunload", function () {
       const quizFrame = document.getElementById("quizFrame");
       quizFrame.src = `${selectedQuiz}?noCache=${Date.now()}`;
@@ -130,10 +130,10 @@
 
     // 2. Nachricht an iframe senden - stoppe intern laufende Prozesse
     function sendStopMessageToIframe() {
-      const quizFrame = document.getElementById("quizFrame");
-
-      if (quizFrame && quizFrame.contentWindow) {
-        quizFrame.contentWindow.postMessage({ action: "stopAll" }, "*");
+      const oldIframe = document.getElementById("quizFrame");
+      if (oldIframe && oldIframe.contentWindow) {
+        // Nachricht ans iframe senden, um aktive Prozesse zu stoppen
+        oldIframe.contentWindow.postMessage({ action: "stopAll" }, "*");
       }
     }
 
@@ -141,14 +141,24 @@
     document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
       radio.addEventListener('change', function () {
         const selectedQuiz = this.value;
-        const quizFrame = document.getElementById("quizFrame");
+        const container = document.querySelector(".container"); // Container, der das iframe enthält
+        const oldIframe = document.getElementById("quizFrame"); // Altes iframe
 
-        // Beenden aller Inhalte im alten iframe (falls aktiv)
-        sendStopMessageToIframe();
+        // Entferne das alte iframe, falls es existiert
+        if (oldIframe) {
+          oldIframe.remove(); // Löscht das alte iframe komplett
+        }
 
-        // Neues Quiz laden
-        quizFrame.src = selectedQuiz;
-        quizFrame.hidden = false;
+        // Neues iframe erstellen
+        const newIframe = document.createElement("iframe");
+        newIframe.id = "quizFrame"; // Setze ID
+        newIframe.src = selectedQuiz; // Setze das neue Quiz
+        newIframe.style.width = "100%"; // Stile können angepasst werden
+        newIframe.style.height = "830px";
+        newIframe.hidden = false; // iframe wieder sichtbar machen
+
+        // Neues iframe in den container einfügen
+        container.appendChild(newIframe);
       });
     });
 
