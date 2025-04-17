@@ -44,12 +44,11 @@ button {
     font-size: 16px;
     cursor: pointer;
     margin-top: 10px;
-    flex: 1; /* Buttons gleich hoch */
 }
 .button-container {
     display: flex;
     flex-direction: row; /* Inhalte untereinander */
-    align-items: flex-start; /* Links ausrichten */
+    align-items: stretch; /* Buttons gleich hoch machen */
     margin-bottom: 0;
     margin-top: 0;
     gap: 10px;
