@@ -114,24 +114,16 @@
   <script>
     window.addEventListener("beforeunload", function () {
       const quizFrame = document.getElementById("quizFrame");
+
+      // Setze iframe auf einen leeren Zustand
       if (quizFrame) {
-        // Entferne iframe-Inhalte
-        quizFrame.parentNode.removeChild(quizFrame);
+        quizFrame.src = "about:blank";
       }
-    });
 
-    // Neues iframe erstellen, wenn die Seite geladen wird
-    window.addEventListener("load", function () {
-      const container = document.querySelector(".container");
-      const newIframe = document.createElement("iframe");
-
-      newIframe.id = "quizFrame";
-      newIframe.src = ""; // Startet leer
-      newIframe.hidden = true; // Wird erst angezeigt, wenn ein Quiz geladen wird
-      newIframe.style.width = "100%";
-      newIframe.style.height = "830px";
-
-      container.appendChild(newIframe);
+      // Stoppe Sprachsynthese
+      if (speechSynthesis.speaking || speechSynthesis.pending) {
+        speechSynthesis.cancel();
+      }
     });
 
     document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
