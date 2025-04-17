@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Zentriert den Container horizontal */
+    align-items: flex-start; /* Top-Ausrichtung vertikal */
+    height: 100%; /* Für Flexbox-Anpassung */
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%; /* Nimmt die volle Breite */
+    max-width: 800px; /* Begrenzter Max-Bereich */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f4f4f9;
+}
+h1{
+    font-size: 1.5rem;
+    margin-top: 0;
+}
+.question-container {
+    display: flex;
+    flex-direction: column; /* Inhalte untereinander */
+    align-items: flex-start; /* Links ausrichten */
+    margin-bottom: 20px;
+    margin-top: 20px;
+    gap: 10px;
+}
+.question {
+    margin-right: 10px; /* Abstand zwischen Frage und Eingabefeld */
+    font-size: 20px;
+}
+.result {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 24px;
+}
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.button-container {
+    display: flex;
+    flex-direction: row; /* Inhalte untereinander */
+    align-items: flex-start; /* Links ausrichten */
+    margin-bottom: 20px;
+    margin-top: 20px;
+    gap: 10px;
+}
+#answer {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%; /* Nimmt die volle verfügbare Breite */
+    max-width: 800px; /* Maximale Breite auf 800px begrenzen */
+    box-sizing: border-box; /* Innenabstand in die Breite einbeziehen */
+    margin-top: 10px; /* Optional: etwas Platz über dem Eingabeformular */
+}
+.keyboard {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+.key {
+    padding: 10px;
+    background-color: #ddd;
+    border: 1px solid #aaa;
+    text-align: center;
+    cursor: pointer;
+    margin: 2px;
+    color: black;
+}
+.key:hover {
+    background-color: #ccc;
+}
+td {
+    padding: 5px;
+    vertical-align: top; /* Text oben ausrichten */
+    white-space: normal;
+    word-break: normal;  /* Keine Trennung inmitten eines Wortes */
+    overflow-wrap: break-word; /* Bricht sehr lange Wörter, um sie innerhalb des Containers zu halten */
+}
+table {
+    border-collapse: collapse;
+    width: auto;
+    margin-left: 0;      /* Tabelle linksbündig */
+}

@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center; /* Horizontale Zentrierung */
+    align-items: flex-start; /* Vertikale Zentrierung */
+    height: 100%; /* Volle Höhe des Ansichtsfensters */
+    padding: 20px;
+    margin: 0; /* Entfernt Standard-Margins */
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Links ausrichten */
+    width: 100%; /* Voll verfügbare Breite */
+    max-width: 800px; /* Begrenzter Bereich */
+    background-color: #f4f4f9;
+}
+h1 {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 2rem;
+}
+
+form {
+    margin-top: 30px;
+    max-width: 800px; /* Begrenzte Breite für großes Layout */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.options-container {
+    display: flex;
+    flex-wrap: wrap; /* Zeilenumbruch erlauben */
+    justify-content: space-between; /* Optionen gleichmäßig verteilen */
+    gap: 10px; /* Abstand zwischen den Elementen */
+}
+
+.option {
+    flex: 1 1 calc(50% - 20px); /* Zwei Optionen nebeneinander (je 50% Breite abzüglich Abstand) */
+    min-width: 200px; /* Minimale Breite eines Blocks */
+    max-width: 350px; /* Maximale Breite eines Blocks */
+    font-size: 1rem;
+    text-align: left; /* Standardmäßig linksbündig */
+}
+
+label {
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer; /* Zeigt den Finger-Cursor an */
+}
+
+#quizFrame {
+    margin-top: 30px;
+    width: 100%; /* Volle Breite */
+    height: 830px; /* Feste Höhe */
+    border: 0;
+    /*border: 2px solid #0078D7;
+    border-radius: 5px;*/
+}
+
+/* Vertikale Darstellung bei kleineren Bildschirmen */
+@media (max-width: 600px) {
+    .options-container {
+        align-items: flex-start; /* Optionen linksbündig ausrichten */
+    }
+
+    .option {
+        flex: 1 1 100%; /* Bei kleinen Bildschirmen eine Option pro Zeile */
+        text-align: left; /* Sicherstellen, dass Text linksbündig ist */
+    }
+
+    label {
+        margin-left: 10px; /* Beibehaltung des linken Abstands */
+        margin-right: 0; /* Kein Abstand nach rechts */
+    }
+}

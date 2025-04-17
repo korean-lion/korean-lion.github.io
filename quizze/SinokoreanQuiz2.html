@@ -3,104 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sinokoreanisches Zahlenquiz</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      margin: 0;
-      display: flex;
-      justify-content: center; /* Zentriert den Container horizontal */
-      align-items: flex-start; /* Top-Ausrichtung vertikal */
-      height: 100%; /* Für Flexbox-Anpassung */
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%; /* Nimmt die volle Breite */
-      max-width: 800px; /* Begrenzter Max-Bereich */
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 20px;
-      background-color: #f4f4f9;
-    }
-    h1{
-      font-size: 1.5rem;
-      margin-top: 0;
-    }
-    .question-container {
-      display: flex;
-      flex-direction: column; /* Inhalte untereinander */
-      align-items: flex-start; /* Links ausrichten */
-      margin-bottom: 20px;
-      margin-top: 20px;
-      gap: 10px;
-    }
-    .question {
-      margin-right: 10px; /* Abstand zwischen Frage und Eingabefeld */
-      font-size: 20px;
-    }
-    .result {
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 20px;
-    }
-    .button-container {
-       display: flex;
-       flex-direction: row; /* Inhalte untereinander */
-       align-items: flex-start; /* Links ausrichten */
-       margin-bottom: 20px;
-       margin-top: 20px;
-       gap: 10px;
-     }
-    button {
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .keyboard {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .keyboard-row {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 5px;
-    }
-    .key {
-      padding: 10px;
-      background-color: #ddd;
-      border: 1px solid #aaa;
-      text-align: center;
-      cursor: pointer;
-      margin: 2px;
-      color: black;
-    }
-    .key:hover {
-      background-color: #ccc;
-    }
-    #answer {
-      padding: 10px;
-      font-size: 16px;
-      width: 50%;
-    }
-    td {
-      padding: 5px;
-      vertical-align: top; /* Text oben ausrichten */
-      white-space: normal;
-      word-break: normal;  /* Keine Trennung inmitten eines Wortes */
-      overflow-wrap: break-word; /* Bricht sehr lange Wörter, um sie innerhalb des Containers zu halten */
-    }
-    table {
-      border-collapse: collapse;
-      width: auto;
-      margin-left: 0;      /* Tabelle linksbündig */
-    }
-  </style>
+  <title>Sinokoreanisches Zahlenquiz</title></title>
+  <link rel="stylesheet" href="../css/style_quiz.css">
 </head>
 <body>
 <div class="container">
@@ -144,127 +48,9 @@
       <div class="key" onclick="addKeyToInput(' ');">Space</div>
     </div>
   </div>
+</div>
 <script>
-  let currentNumber; // Die aktuelle Zufallszahl
-  let currentSinoNumber; //Die aktuelle sinokoreanische Zahl
-
-  window.addEventListener("message", function (event) {
-    if (event.data.action === "stopAll") {
-      // Stoppe Sprachsynthese
-      if (speechSynthesis.speaking || speechSynthesis.pending) {
-        speechSynthesis.cancel();
-      }
-
-      // Ergänze Logik, um z. B. Timer oder andere Prozesse zu stoppen
-      if (typeof intervalId !== 'undefined') {
-        clearInterval(intervalId);
-      }
-    }
-  });
-
-  document.addEventListener("DOMContentLoaded", function () {
-
-    function sendHeightToParent() {
-      const height = document.body.scrollHeight; // Die gesamte Höhe des Inhalts
-      window.parent.postMessage({type: "resize", scrollHeight: height}, "*");
-    }
-
-// Sende die Höhe beim Laden und bei Änderungen
-    window.addEventListener("load", sendHeightToParent);
-    window.addEventListener("resize", sendHeightToParent); // Falls die Größe dynamisch angepasst wird
-
-    // Initiale Höhe senden
-    sendHeightToParent();
-
-    // **MutationObserver für DOM-Änderungen**
-    const observer = new MutationObserver(() => {
-      sendHeightToParent(); // Trigger bei jeder DOM-Veränderung
-    });
-
-    observer.observe(document.body, {childList: true, subtree: true, attributes: true}); // Beobachte DOM-Änderungen
-
-    // **Überprüfung bei Benutzerinteraktionen (Klicks) erzwingen**
-    document.body.addEventListener("click", () => {
-      sendHeightToParent(); // Höhe nach Klick erneut überprüfen
-    });
-
-    // Resize-Event (falls Browserfenstergröße Änderungen bewirkt)
-    window.addEventListener("resize", sendHeightToParent);
-  });
-
-  // Event Listener für die Enter-Taste im Eingabefeld
-  document.getElementById("answer").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") { // Prüft, ob die Return/Enter-Taste gedrückt wurde
-      event.preventDefault(); // Verhindert das Standardverhalten (z. B. Formular abschicken)
-      checkAnswer(); // Führt die Überprüfung durch
-    }
-  });
-
-  // Konvertiert eine Zahl in sinokoreanische Zahlen
-  function generateSinokoreanNumber(number) {
-    if (typeof number !== 'number' || number % 1 !== 0) {
-      throw new Error('Die Eingabe muss eine ganze Zahl sein.');
-    }
-
-    const sinoKoreanDigits = ['영', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
-    const sinoKoreanUnits = ['', '십', '백', '천'];
-    const sinoKoreanLargeUnits = ['', '만', '억', '조', '경'];
-
-    // Zahl in Ziffern aufteilen und umdrehen
-    const digits = String(number).split('').reverse();
-    let result = '';
-    let groupResult = ''; // Zwischenwert für die aktuellen 4 Ziffern
-    let largeUnitIndex = 0; // Index für große Einheiten (만, 억, ...)
-
-    for (let i = 0; i < digits.length; i++) {
-      const digit = parseInt(digits[i]);
-      const unitPosition = i % 4; // Position innerhalb des 4er-Blocks
-
-      if (digit !== 0) {
-        // Sonderfall: Die Zehnerstelle hat eine "1"
-        if (digit === 1 && unitPosition === 1) {
-          groupResult = sinoKoreanUnits[unitPosition] + groupResult; // Nur "십", ohne "일"
-        } else {
-          groupResult = sinoKoreanDigits[digit] + sinoKoreanUnits[unitPosition] + groupResult;
-        }
-      }
-
-      // Wenn das Ende eines 4er-Blocks erreicht ist oder die letzte Ziffer erreicht ist
-      if (unitPosition === 3 || i === digits.length - 1) {
-        if (groupResult) {
-          // Große Einheit hinzufügen, falls der Block nicht leer ist
-          result = groupResult + sinoKoreanLargeUnits[largeUnitIndex] + result;
-        }
-        groupResult = ''; // Zurücksetzen des Block-Resultats
-        largeUnitIndex++; // Zur nächsten großen Einheit wechseln
-      }
-    }
-
-    return result || sinoKoreanDigits[0]; // Rückgabe "영" für 0
-  }
-
-  function formatNumberWithThousandSeparator(num) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Tausenderpunkt hinzufügen
-  }
-
-  function formatKoreanNumberWithSpaces(number) {
-    return number.replace(/([백천만억조])(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
-    //return number.replace(/(백|천|만|억|조)(?=\D)/g, '$1 '); // Füge ein Leerzeichen nach den Einheiten hinzu, wenn etwas folgt
-  }
-
-  // Funktion, die beim Klick über onclick ausgelöst wird
-  function handleReplayClick() {
-    const replayButton = document.getElementById("replayButton");
-    replayButton.disabled = true; // Button deaktivieren
-
-    // Nach 1 Sekunde den Button wieder aktivieren
-    setTimeout(() => {
-      replayButton.disabled = false;
-    }, 1000);
-
-    // Die ursprüngliche Funktionalität ausführen
-    speakKorean(currentSinoNumber); // Ruft die Sprache aus der bestehenden Logik auf
-  }
+  let language = 'sino';
 
   function generateQuiz() {
     const rangeSelect = document.getElementById("rangeSelect");
@@ -275,24 +61,6 @@
     document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${formatKoreanNumberWithSpaces(currentSinoNumber)}?`;
     //document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen
     document.getElementById("answer").value = ""; // Eingabefeld zurücksetzen(
-  }
-
-  /*function speakGerman(answer) {
-    const utterance = new SpeechSynthesisUtterance(answer);
-    utterance.lang = 'de-DE'; // Setzt die Sprache auf Deutsch
-    speechSynthesis.speak(utterance);
-  }*/
-
-  function playSound(src) {
-    const audio = new Audio(src);
-    audio.play().catch(error => console.error("Audio konnte nicht abgespielt werden:", error));
-  }
-
-  function speakKorean(answer) {
-    const utterance = new SpeechSynthesisUtterance(answer);
-    utterance.lang = 'ko-KR'; // Setzt die Sprache auf Koreanisch
-    utterance.rate = 0.5; // Setzt die Sprechgeschwindigkeit (1.0 ist normal, 0.5 ist langsamer)
-    speechSynthesis.speak(utterance);
   }
 
   function checkAnswer() {
@@ -352,24 +120,9 @@
       //resultDiv.innerHTML = `Richtig! Gut gemacht. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(correctAnswer)}.`;
       //speakGerman(correctAnswer);
     } else {
-      // Falsche Antwort: Zeichen-für-Zeichen-Vergleich
-      let feedbackUser = "";
-      let feedbackCorrect = "";
-      const maxLength = Math.max(correctNumberStr.length, userInputStr.length);
+      // Fehler finden
+      const { feedbackUser, feedbackCorrect } = generateFeedback(userInputStr, correctNumberStr);
 
-      playSound("../sounds/error.mp3"); // Ton für falsche Lösung
-
-      for (let i = 0; i < maxLength; i++) {
-        if (userInputStr[i] === correctNumberStr[i]) {
-          // Richtig eingegebene Stelle in Grün
-          feedbackUser += `<span style="color: green;">${userInputStr[i] || ""}</span>`;
-          feedbackCorrect += `<span style="color: green;">${correctNumberStr[i] || ""}</span>`;
-        } else {
-          // Falsch eingegebene Stelle in Rot
-          feedbackUser += `<span style="color: red;">${userInputStr[i] || "_"}</span>`;
-          feedbackCorrect += `<span style="color: red;">${correctNumberStr[i] || "_"}</span>`;
-        }
-      }
       resultDiv.innerHTML = `
               <p>Leider falsch. <button id="weiterButton" style="margin-left: 10px; font-size: 14px;margin-top:0;">Weiter</button></p>
               <table>
@@ -400,21 +153,8 @@
       // speakGerman(correctAnswer);
     }
   }
-
-  function addKeyToInput(key) {
-    const answerField = document.getElementById("answer");
-    answerField.value += key; // Füge den gedrückten Schlüssel zum Eingabefeld hinzu
-    answerField.focus(); // Setze den Fokus auf das Eingabefeld
-  }
-
-  function removeLastCharacter() {
-    const answerField = document.getElementById("answer");
-    answerField.value = answerField.value.slice(0, -1); // Entferne das letzte Zeichen
-  }
-
-  // Generiere die erste Frage sofort
-  generateQuiz();
 </script>
-</div>
+  <script src="../js/sino.js"></script>
+  <script src="../js/quizz.js"></script>
 </body>
 </html>
