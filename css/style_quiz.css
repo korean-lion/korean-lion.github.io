@@ -96,3 +96,6 @@ table {
     width: auto;
     margin-left: 0;      /* Tabelle linksbündig */
 }
+p {
+    font-size: 14px;
+}
