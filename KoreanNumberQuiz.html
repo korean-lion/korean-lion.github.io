@@ -117,6 +117,7 @@
       if (speechSynthesis) {
         speechSynthesis.cancel(); // Stoppt alle laufenden Sprachsyntheseprozesse
       }
+      radio.removeEventListener('change');
     });
 
     document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
@@ -148,7 +149,7 @@
       // Setzt sicher, dass keine Radio-Option vorausgewählt ist
       document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
         radio.checked = false;
-        radio.removeEventListener();
+        //radio.removeEventListener();
       });
     });
     // Event Listener für Radio-Buttons
