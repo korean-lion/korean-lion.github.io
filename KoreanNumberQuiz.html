@@ -141,24 +141,25 @@
     document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
       radio.addEventListener('change', function () {
         const selectedQuiz = this.value;
-        const container = document.querySelector(".container"); // Container, der das iframe enthält
-        const oldIframe = document.getElementById("quizFrame"); // Altes iframe
+        const container = document.querySelector(".container");
+        const oldIframe = document.getElementById("quizFrame");
 
-        // Entferne das alte iframe, falls es existiert
+        sendStopMessageToIframe(); // Prozesse im alten iframe beenden
+
+        // Entfernen des alten iframes
         if (oldIframe) {
-          oldIframe.remove(); // Löscht das alte iframe komplett
+          oldIframe.remove();
         }
 
         // Neues iframe erstellen
         const newIframe = document.createElement("iframe");
-        newIframe.id = "quizFrame"; // Setze ID
-        newIframe.src = selectedQuiz; // Setze das neue Quiz
-        newIframe.style.width = "100%"; // Stile können angepasst werden
+        newIframe.id = "quizFrame";
+        newIframe.src = selectedQuiz;
+        newIframe.style.width = "100%";
         newIframe.style.height = "830px";
-        newIframe.hidden = false; // iframe wieder sichtbar machen
+        newIframe.hidden = false;
 
-        // Neues iframe in den container einfügen
-        container.appendChild(newIframe);
+        container.appendChild(newIframe); // Neues iframe einfügen
       });
     });
 
