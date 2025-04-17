@@ -201,6 +201,13 @@
   let currentNumber;
   let currentInput = '';
 
+  // Beende die Sprachsynthese beim Verlassen oder Schließen des iframe
+  window.addEventListener("unload", function () {
+    if (speechSynthesis) {
+      speechSynthesis.cancel(); // Stoppt die laufenden Sprachprozesse
+    }
+  });
+
   document.addEventListener("DOMContentLoaded", function () {
    // let lastSentHeight = 0; // Speichert die zuletzt gesendete Höhe
 

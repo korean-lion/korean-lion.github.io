@@ -105,6 +105,13 @@
   let currentNumber; // Die aktuelle Zufallszahl
   let currentSinoNumber; //Die aktuelle sinokoreanische Zahl
 
+  // Beende die Sprachsynthese beim Verlassen oder Schließen des iframe
+  window.addEventListener("unload", function () {
+    if (speechSynthesis) {
+      speechSynthesis.cancel(); // Stoppt die laufenden Sprachprozesse
+    }
+  });
+
   document.addEventListener("DOMContentLoaded", function () {
 
     function sendHeightToParent() {
