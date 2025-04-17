@@ -12,9 +12,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Links ausrichten */
-    width: 100vw; /* Voll verfügbare Breite */
-    //max-width: 800px; /* Begrenzter Bereich */
+    width: 100%; /* Voll verfügbare Breite */
+    max-width: 800px; /* Begrenzter Bereich */
     background-color: #f4f4f9;
+    height: 100%;
 }
 h1 {
     margin-top: 10px;
