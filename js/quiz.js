@@ -200,13 +200,13 @@ function handleReplayClick() {
 
     // Die ursprüngliche Funktionalität ausführen
     switch (language) {
-        case german:
+        case 'german':
             speakGerman(currentNumber);
             break;
-        case korean:
+        case 'korean':
             speakKorean(numbers[currentNumber]);
             break;
-        case sino:
+        case 'sino':
             speakKorean(currentSinoNumber);
             break;
         default:
