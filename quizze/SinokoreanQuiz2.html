@@ -60,6 +60,29 @@
       cursor: pointer;
       margin-top: 10px;
     }
+    .keyboard {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 5px;
+    }
+    .key {
+      padding: 10px;
+      background-color: #ddd;
+      border: 1px solid #aaa;
+      text-align: center;
+      cursor: pointer;
+      margin: 2px;
+      color: black;
+    }
+    .key:hover {
+      background-color: #ccc;
+    }
     #answer {
       padding: 10px;
       font-size: 16px;
@@ -101,6 +124,26 @@
     <button id="stoppButton" onclick="speechSynthesis.cancel()">&#11035;</button>
   </div>
   <div class="result" id="result"></div>
+  <div class="keyboard">
+    <div class="keyboard-row">
+      <div class="key" onclick="addKeyToInput('1')">1</div>
+      <div class="key" onclick="addKeyToInput('2')">2</div>
+      <div class="key" onclick="addKeyToInput('3')">3</div>
+      <div class="key" onclick="addKeyToInput('4')">4</div>
+      <div class="key" onclick="addKeyToInput('5')">5</div>
+    </div>
+    <div class="keyboard-row">
+      <div class="key" onclick="addKeyToInput('6')">6</div>
+      <div class="key" onclick="addKeyToInput('7')">7</div>
+      <div class="key" onclick="addKeyToInput('8')">8</div>
+      <div class="key" onclick="addKeyToInput('9')">9</div>
+      <div class="key" onclick="addKeyToInput('0')">0</div>
+    </div>
+    <div class="keyboard-row">
+      <div class="key" onclick="removeLastCharacter()">Backspace</div>
+      <div class="key" onclick="addKeyToInput(' ');">Space</div>
+    </div>
+  </div>
 <script>
   let currentNumber; // Die aktuelle Zufallszahl
   let currentSinoNumber; //Die aktuelle sinokoreanische Zahl
@@ -356,6 +399,17 @@
       //resultDiv.innerHTML = `${feedbackUser} ist leider falsch. Die Dezimalzahl für ${formatKoreanNumberWithSpaces(previousSinoNumber)} lautet ${formatNumberWithThousandSeparator(feedbackCorrect)}`;
       // speakGerman(correctAnswer);
     }
+  }
+
+  function addKeyToInput(key) {
+    const answerField = document.getElementById("answer");
+    answerField.value += key; // Füge den gedrückten Schlüssel zum Eingabefeld hinzu
+    answerField.focus(); // Setze den Fokus auf das Eingabefeld
+  }
+
+  function removeLastCharacter() {
+    const answerField = document.getElementById("answer");
+    answerField.value = answerField.value.slice(0, -1); // Entferne das letzte Zeichen
   }
 
   // Generiere die erste Frage sofort
