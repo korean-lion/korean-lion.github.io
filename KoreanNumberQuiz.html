@@ -113,6 +113,8 @@
   <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
   <script>
+    quizFrame.src = `${selectedQuiz}?v=${Date.now()}`;
+
     window.addEventListener("beforeunload", function () {
       const quizFrame = document.getElementById("quizFrame");
 
