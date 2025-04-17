@@ -112,10 +112,17 @@
   <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
   <script>
-    // Stoppt die Sprachsynthese beim Neuladen oder Verlassen der Seite
     window.addEventListener("beforeunload", function () {
-      if (speechSynthesis) {
-        speechSynthesis.cancel(); // Stoppt alle laufenden Sprachsyntheseprozesse
+      const quizFrame = document.getElementById("quizFrame");
+
+      // Sicherstellen, dass SpeechSynthese gestoppt wird
+      if (speechSynthesis.speaking || speechSynthesis.pending) {
+        speechSynthesis.cancel(); // Stoppt Sprachprozesse
+      }
+
+      // Eingebundene iframe-JavaScript-Prozesse beenden
+      if (quizFrame.contentWindow) {
+        quizFrame.contentWindow.postMessage({ action: 'stopAll' }, '*');
       }
     });
 
