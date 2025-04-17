@@ -201,10 +201,17 @@
   let currentNumber;
   let currentInput = '';
 
-  // Beende die Sprachsynthese beim Verlassen oder Schließen des iframe
-  window.addEventListener("unload", function () {
-    if (speechSynthesis) {
-      speechSynthesis.cancel(); // Stoppt die laufenden Sprachprozesse
+  window.addEventListener("message", function (event) {
+    if (event.data.action === "stopAll") {
+      // Stoppe Sprachsynthese
+      if (speechSynthesis.speaking || speechSynthesis.pending) {
+        speechSynthesis.cancel();
+      }
+
+      // Ergänze Logik, um z. B. Timer oder andere Prozesse zu stoppen
+      if (typeof intervalId !== 'undefined') {
+        clearInterval(intervalId);
+      }
     }
   });
 
