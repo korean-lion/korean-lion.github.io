@@ -13,7 +13,7 @@ body {
     flex-direction: column;
     align-items: flex-start; /* Links ausrichten */
     width: 100%; /* Voll verfügbare Breite */
-    max-width: 800px; /* Begrenzter Bereich */
+    /*max-width: 800px; /* Begrenzter Bereich */
     background-color: #f4f4f9;
 }
 h1 {
