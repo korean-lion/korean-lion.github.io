@@ -112,6 +112,13 @@
   <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
   <script>
+    // Stoppt die Sprachsynthese beim Neuladen oder Verlassen der Seite
+    window.addEventListener("beforeunload", function () {
+      if (speechSynthesis) {
+        speechSynthesis.cancel(); // Stoppt alle laufenden Sprachsyntheseprozesse
+      }
+    });
+
     document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
       radio.addEventListener('change', function () {
         const selectedQuiz = this.value;
