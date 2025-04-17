@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="de">
-<meta http-equiv="Cache-Control" content="no-store">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -113,20 +112,43 @@
   <iframe id="quizFrame" src="" title="Quiz" hidden></iframe>
 
   <script>
-    quizFrame.src = `${selectedQuiz}?v=${Date.now()}`;
-
+    // 1. Stoppe Prozesse bei reload/navigieren
     window.addEventListener("beforeunload", function () {
       const quizFrame = document.getElementById("quizFrame");
 
-      // Setze iframe auf einen leeren Zustand
-      if (quizFrame) {
-        quizFrame.src = "about:blank";
+      // 1a: Beende speechSynthesis-Prozesse
+      if (speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)) {
+        speechSynthesis.cancel(); // Stoppe Sprachprozesse
       }
 
-      // Stoppe Sprachsynthese
-      if (speechSynthesis.speaking || speechSynthesis.pending) {
-        speechSynthesis.cancel();
+      // 1b: Entlade iframe vollständig
+      if (quizFrame) {
+        quizFrame.src = "about:blank"; // Setze iframe auf leer
       }
+    });
+
+    // 2. Nachricht an iframe senden - stoppe intern laufende Prozesse
+    function sendStopMessageToIframe() {
+      const quizFrame = document.getElementById("quizFrame");
+
+      if (quizFrame && quizFrame.contentWindow) {
+        quizFrame.contentWindow.postMessage({ action: "stopAll" }, "*");
+      }
+    }
+
+    // 3. Event listener für Quizwechsel
+    document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        const selectedQuiz = this.value;
+        const quizFrame = document.getElementById("quizFrame");
+
+        // Beenden aller Inhalte im alten iframe (falls aktiv)
+        sendStopMessageToIframe();
+
+        // Neues Quiz laden
+        quizFrame.src = selectedQuiz;
+        quizFrame.hidden = false;
+      });
     });
 
     document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
