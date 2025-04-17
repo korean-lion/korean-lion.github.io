@@ -148,6 +148,7 @@
       // Setzt sicher, dass keine Radio-Option vorausgewählt ist
       document.querySelectorAll('input[name="quiz"]').forEach(function(radio) {
         radio.checked = false;
+        radio.removeEventListener();
       });
     });
     // Event Listener für Radio-Buttons
