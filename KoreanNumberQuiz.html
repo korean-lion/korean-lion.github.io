@@ -114,16 +114,24 @@
   <script>
     window.addEventListener("beforeunload", function () {
       const quizFrame = document.getElementById("quizFrame");
-
-      // Sicherstellen, dass SpeechSynthese gestoppt wird
-      if (speechSynthesis.speaking || speechSynthesis.pending) {
-        speechSynthesis.cancel(); // Stoppt Sprachprozesse
+      if (quizFrame) {
+        // Entferne iframe-Inhalte
+        quizFrame.parentNode.removeChild(quizFrame);
       }
+    });
 
-      // Eingebundene iframe-JavaScript-Prozesse beenden
-      if (quizFrame.contentWindow) {
-        quizFrame.contentWindow.postMessage({ action: 'stopAll' }, '*');
-      }
+    // Neues iframe erstellen, wenn die Seite geladen wird
+    window.addEventListener("load", function () {
+      const container = document.querySelector(".container");
+      const newIframe = document.createElement("iframe");
+
+      newIframe.id = "quizFrame";
+      newIframe.src = ""; // Startet leer
+      newIframe.hidden = true; // Wird erst angezeigt, wenn ein Quiz geladen wird
+      newIframe.style.width = "100%";
+      newIframe.style.height = "830px";
+
+      container.appendChild(newIframe);
     });
 
     document.querySelectorAll('input[name="quiz"]').forEach(function (radio) {
