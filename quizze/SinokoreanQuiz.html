@@ -64,13 +64,7 @@
     function generateQuiz() {
         const rangeSelect = document.getElementById("rangeSelect");
         const maxRange = parseInt(rangeSelect.value); // Maximalen Bereich aus der Auswahl abrufen
-        let newNumber;
-
-        do {
-            newNumber = Math.floor(Math.random() * (maxRange + 1)); // Neue Zufallszahl zwischen 0 und maxRange
-        } while (newNumber === currentNumber); // Wiederholen, wenn die Zahlen übereinstimmen
-
-        currentNumber = newNumber; // Die neue Zufallszahl speichern
+        currentNumber = generateUniqueRandomNumber(maxRange); // Neue eindeutige Zufallszahl generieren
         document.getElementById("question").innerText = `Was ist die sinokoreanische Zahl für ${formatNumberWithThousandSeparator(currentNumber)}?`;
         // Bereich 1000-1999 überprüfen, da sonst Aussprache x-hundert
         if (currentNumber < 1000 || currentNumber > 1999) {

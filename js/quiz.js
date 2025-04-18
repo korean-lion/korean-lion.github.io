@@ -214,6 +214,15 @@ function handleReplayClick() {
             break;
     }
 }
+function generateUniqueRandomNumber(maxRange) {
+    let newNumber;
+
+    do {
+        newNumber = Math.floor(Math.random() * (maxRange + 1)); // Neue Zufallszahl zwischen 0 und maxRange
+    } while (newNumber === currentNumber); // Wiederholen, wenn die Zahlen übereinstimmen
+
+    return newNumber; // Die neue Zufallszahl zurückgeben
+}
 
 function generateFeedback(userInputStr, correctNumberStr) {
     let feedbackUser = "";
