@@ -44,7 +44,13 @@
   let language = 'korean';
 
   function generateQuiz() {
-    currentNumber = Math.floor(Math.random() * 101); // Zufallszahl generieren
+    let newNumber;
+
+    do {
+      newNumber = Math.floor(Math.random() * 101); // Neue Zufallszahl zwischen 0 und maxRange
+    } while (newNumber === currentNumber); // Wiederholen, wenn die Zahlen übereinstimmen
+
+    currentNumber = newNumber; // Die neue Zufallszahl speichern
     document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${numbers[currentNumber]}?`;
     speakKorean(numbers[currentNumber]);
     // document.getElementById("result").innerText = ""; // Ergebnis zurücksetzen

@@ -55,7 +55,13 @@
   function generateQuiz() {
     const rangeSelect = document.getElementById("rangeSelect");
     const maxRange = parseInt(rangeSelect.value); // Maximalen Bereich aus der Auswahl abrufen
-    currentNumber = Math.floor(Math.random() * (maxRange + 1)); // Zufallszahl zwischen 0 und maxRange
+    let newNumber;
+
+    do {
+      newNumber = Math.floor(Math.random() * (maxRange + 1)); // Neue Zufallszahl zwischen 0 und maxRange
+    } while (newNumber === currentNumber); // Wiederholen, wenn die Zahlen übereinstimmen
+
+    currentNumber = newNumber; // Die neue Zufallszahl speichern
     currentSinoNumber = generateSinokoreanNumber(currentNumber);
     speakKorean(currentSinoNumber);
     document.getElementById("question").innerText = `Was ist die Dezimalzahl für ${formatKoreanNumberWithSpaces(currentSinoNumber)}?`;
